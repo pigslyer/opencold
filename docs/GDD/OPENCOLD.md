@@ -51,13 +51,13 @@ Revision: 0.0.1
 
 ## Core Gameplay Mechanics Brief
 
-  - <Gameplay Mechanic #1>
-  - <Gameplay Mechanic #2>
-  - <Gameplay Mechanic #3>
-  - <Gameplay Mechanic #4>
+  - <Combat>
+  - <Exploration>
+  - <Resource management>
+  - <Implants>
 
 ## Targeted platforms
-  - <Example Platform #1 Here>
+  - <PC>
   - <Example Platform #2 Here>
   - <Example Platform #3 Here>
 
@@ -84,9 +84,9 @@ Revision: 0.0.1
     - Total Costs with breakdown
 
 ## Influences (Brief)
-  - Influence #1
-    - Medium (Television, Games, Literature, Movies, etc.)
-    - /Explain why this is an influence in 1 Paragraph or less/
+  - Zero Sievert 
+    - Game
+    - Resource management system,
   - Influence #2
     - Medium (Television, Games, Literature, Movies, etc.)
     - /Explain why this is an influence in 1 Paragraph or less/
@@ -119,17 +119,22 @@ Pretend that your were pitching your game to a executive going to the elevator. 
   - <Reason #4>
   - <etc.>
 
-## Core Gameplay Mechanics (Detailed)
-  - [Core Gameplay Mechanic #1]
-    - [Details] /Describe in 2 Paragraphs or less/
+##Core Gameplay Mechanics (Detailed)
+  - Combat
+    - [Details] 
     - [How it works] /Describe in 2 Paragraphs or less/
-  - [Core Gameplay Mechanic #2]
-    - [Details] /Describe in 2 Paragraphs or less/
+  - Exploration
+    - [Details] 
     - [How it works] /Describe in 2 Paragraphs or less/
-  - [Core Gameplay Mechanic #3]
-    - [Details] /Describe in 2 Paragraphs or less/
+  - Resource Management
+    - [Details] Inventory management is crucial to survive. The first resource is fuel. Different fuels can be gathered to keep the player warm, or even be used as ammunition. 
+    - The second resource is also one that affects heat, the reactor time. Used to install the implants you've collected in runs. 
+    - The third resource is items that affect combat. These include guns, their bullets and attachments, melee weapons
+    - The fourth resource is implant blueprints for future runs, which you bring to implant stations. 
+    - The fifth resource is health. When it runs out, you die. Can be depleted by combat and environmental hazarads.
+    - The sixth resource is cybernetic implant blueprints. They are rare and can be obtained mainly through exploration. Upon reaching implant station become permanently accessible.
     - [How it works] /Describe in 2 Paragraphs or less/
-  - [Core Gameplay Mechanic #4]
+  - Implants
     - [Details] /Describe in 2 Paragraphs or less/
     - [How it works] /Describe in 2 Paragraphs or less/
 
