@@ -1,0 +1,34 @@
+[gd_scene load_steps=6 format=3 uid="uid://bv8hayx4en8oc"]
+
+[ext_resource type="Script" path="res://src/player/Player.gd" id="1_gnilo"]
+[ext_resource type="PackedScene" uid="uid://btdtc2o2jdoxs" path="res://src/models/humanoid/HumanoidModel.tscn" id="2_pw0av"]
+
+[sub_resource type="Curve" id="Curve_lcvly"]
+min_value = 250.0
+max_value = 550.0
+_data = [Vector2(0, 505.263), 0.0, 0.0, 0, 0, Vector2(0.749361, 319.474), 0.0, 0.0, 0, 0, Vector2(1, 395.263), 584.875, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_4q03m"]
+max_value = 200.0
+_data = [Vector2(0, 164.211), 0.0, 0.0, 0, 0, Vector2(0.659847, 73.6842), 0.0, 0.0, 0, 0, Vector2(1, 105.263), 137.193, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6ijbq"]
+radius = 40.0
+height = 186.0
+
+[node name="Player" type="CharacterBody2D" groups=["PLAYER"]]
+script = ExtResource("1_gnilo")
+acceleration_curve = SubResource("Curve_lcvly")
+speed_curve = SubResource("Curve_4q03m")
+sprinting_mult = 2.0
+deceleration_speed = 1000.0
+
+[node name="HumanoidModel" parent="." instance=ExtResource("2_pw0av")]
+
+[node name="Camera" type="Camera2D" parent="HumanoidModel"]
+position = Vector2(150, 0)
+
+[node name="BodyShape" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_6ijbq")

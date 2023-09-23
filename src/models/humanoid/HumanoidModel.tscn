@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://btdtc2o2jdoxs"]
+
+[ext_resource type="Texture2D" uid="uid://cefay3p87ij2q" path="res://src/assets/icon.svg" id="1_4oqx8"]
+[ext_resource type="Script" path="res://src/models/humanoid/HumanoidModel.gd" id="1_dtwlg"]
+
+[node name="HumanoidModel" type="Node2D"]
+script = ExtResource("1_dtwlg")
+
+[node name="Head" type="Sprite2D" parent="."]
+rotation = 4.71239
+texture = ExtResource("1_4oqx8")
+
+[node name="Body" type="Sprite2D" parent="Head"]
+show_behind_parent = true
+scale = Vector2(1.4, 0.6)
+texture = ExtResource("1_4oqx8")
