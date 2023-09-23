@@ -5,3 +5,9 @@ export/*
 !export/.gitkeep
 
 .vscode/*
+docs/.obsidian/app.json
+docs/.obsidian/appearance.json
+docs/.obsidian/core-plugins-migration.json
+docs/.obsidian/core-plugins.json
+docs/.obsidian/hotkeys.json
+docs/.obsidian/workspace.json
