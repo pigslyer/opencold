@@ -18,7 +18,7 @@ point_count = 3
 radius = 40.0
 height = 186.0
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" groups=["PLAYER"]]
 script = ExtResource("1_gnilo")
 acceleration_curve = SubResource("Curve_lcvly")
 speed_curve = SubResource("Curve_4q03m")
