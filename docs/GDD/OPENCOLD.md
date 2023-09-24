@@ -130,7 +130,8 @@ Pretend that your were pitching your game to a executive going to the elevator. 
     - The first resource is Health. When it runs out, you die. Can be depleted by combat and environmental hazarads.
     - The second resource is your Heat. As it falls lower, you are debuffed and eventually start losing life.
     - The third resource is Heat Producers. These are corpses and similar environmental objects you use to warm yourself up so you don't freeze. The reactor is your primary heat producer for the first part of the game.
-    - The fourth resource is the Countdown of the reactor. It can be used to get implants if a player finds an implant station.
+    - The fourth resource is Energy. It is used to power your implants.
+    - The fifth resource is the Countdown of the reactor. It can be used to get implants if a player finds an implant station.
     - Inventory resources:
 	    - The first resource is Fuel. Different fuels can be gathered to keep the player warm, or even be used as ammunition.
 	    - The second resource is Catalysts. They ignite Fuel you have when interacting with the right Heat Producer and generate heat.
