@@ -136,7 +136,7 @@ Pretend that your were pitching your game to a executive going to the elevator. 
 	    - The first resource is Fuel. Different fuels can be gathered to keep the player warm, or even be used as ammunition.
 	    - The second resource is Catalysts. They ignite Fuel you have when interacting with the right Heat Producer and generate heat.
 	    - The third resource is items that affect combat. These include guns, their bullets and attachments, melee weapons.
-	    - The sixth resource is cybernetic implant blueprints. They are rare and can be obtained mainly through exploration. Upon reaching implant station become permanently accessible.
+	    - The fourth resource is cybernetic implant blueprints. They are rare and can be obtained mainly through exploration. Upon reaching implant station become permanently accessible.
     - [How it works] /Describe in 2 Paragraphs or less/
   - Implants
     - [Details] /Describe in 2 Paragraphs or less/
