@@ -8,3 +8,5 @@ script = ExtResource("1_yxjxa")
 id = "test_resource"
 name = "Test Resource"
 icon = ExtResource("1_yl8xl")
+stack_size = 1
+size = Vector2i(3, 1)

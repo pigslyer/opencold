@@ -1,0 +1,22 @@
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://nx2nye8m3osl"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g8rgh"]
+bg_color = Color(0.678431, 0.678431, 0.678431, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7nof0"]
+bg_color = Color(0.360784, 0.360784, 0.360784, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0, 0, 1)
+
+[resource]
+InventoryRenderer/colors/grid_line_color = Color(0.458824, 0.572549, 0.854902, 1)
+InventoryRenderer/styles/cell_empty = SubResource("StyleBoxFlat_g8rgh")
+InventoryRenderer/styles/cell_filled = SubResource("StyleBoxFlat_7nof0")
