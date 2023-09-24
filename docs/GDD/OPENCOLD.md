@@ -87,9 +87,9 @@ Revision: 0.0.1
   - Zero Sievert 
     - Game
     - Resource management system,
-  - Influence #2
-    - Medium (Television, Games, Literature, Movies, etc.)
-    - /Explain why this is an influence in 1 Paragraph or less/
+  - Outer Wilds
+    - Game
+    - The way the game restarts will be remeniscent of how it worked here.
   - Influence #3
     - Medium (Television, Games, Literature, Movies, etc.)
     - /Explain why this is an influence in 1 Paragraph or less/
@@ -127,12 +127,15 @@ Pretend that your were pitching your game to a executive going to the elevator. 
     - [Details] 
     - [How it works] /Describe in 2 Paragraphs or less/
   - Resource Management
-    - [Details] Inventory management is crucial to survive. The first resource is fuel. Different fuels can be gathered to keep the player warm, or even be used as ammunition. 
-    - The second resource is also one that affects heat, the reactor time. Used to install the implants you've collected in runs. 
-    - The third resource is items that affect combat. These include guns, their bullets and attachments, melee weapons
-    - The fourth resource is implant blueprints for future runs, which you bring to implant stations. 
-    - The fifth resource is health. When it runs out, you die. Can be depleted by combat and environmental hazarads.
-    - The sixth resource is cybernetic implant blueprints. They are rare and can be obtained mainly through exploration. Upon reaching implant station become permanently accessible.
+    - The first resource is Health. When it runs out, you die. Can be depleted by combat and environmental hazarads.
+    - The second resource is your Heat. As it falls lower, you are debuffed and eventually start losing life.
+    - The third resource is Heat Producers. These are corpses and similar environmental objects you use to warm yourself up so you don't freeze. The reactor is your primary heat producer for the first part of the game.
+    - The fourth resource is the Countdown of the reactor. It can be used to get implants if a player finds an implant station.
+    - Inventory resources:
+	    - The first resource is Fuel. Different fuels can be gathered to keep the player warm, or even be used as ammunition.
+	    - The second resource is Catalysts. They ignite Fuel you have when interacting with the right Heat Producer and generate heat.
+	    - The third resource is items that affect combat. These include guns, their bullets and attachments, melee weapons.
+	    - The sixth resource is cybernetic implant blueprints. They are rare and can be obtained mainly through exploration. Upon reaching implant station become permanently accessible.
     - [How it works] /Describe in 2 Paragraphs or less/
   - Implants
     - [Details] /Describe in 2 Paragraphs or less/
