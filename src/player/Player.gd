@@ -12,6 +12,9 @@ extends CharacterBody2D
 @onready var collision_shape: CollisionShape2D = $BodyShape;
 @onready var human_model: HumanoidModel = $HumanoidModel;
 
+## The Player's body heat in Celsius
+var heat: float = 37.0
+
 func _physics_process(delta: float) -> void:
 	var facing_angle: float = get_local_mouse_position().angle();
 	human_model.set_facing_target_angle(facing_angle);
@@ -38,3 +41,14 @@ func _physics_process(delta: float) -> void:
 	
 	collision_shape.rotation = human_model.get_body_angle();
 
+func _process(delta: float) -> void:
+	if heat <= 24.0:
+		#Fucking die instantly
+		print("Man, I'm dead. (SkullEmoji)")
+
+func alter_heat(heat_data: HeatData) -> void:
+	var heat_diff = heat_data.target_internal_heat - heat
+	
+	if heat_diff < 0.0 and heat_data.warm_up_only:
+		return
+	heat += heat_diff * heat_data.heat_rate

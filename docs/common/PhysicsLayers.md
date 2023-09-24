@@ -16,3 +16,6 @@ See above, but enemy.
 
 ### Interactive
 Refers to things the player can interact with in the environment.
+
+### Heat
+Refers to areas which are effected by a heat source.
