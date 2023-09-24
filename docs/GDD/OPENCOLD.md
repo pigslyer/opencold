@@ -51,13 +51,13 @@ Revision: 0.0.1
 
 ## Core Gameplay Mechanics Brief
 
-  - <Gameplay Mechanic #1>
-  - <Gameplay Mechanic #2>
-  - <Gameplay Mechanic #3>
-  - <Gameplay Mechanic #4>
+  - <Combat>
+  - <Exploration>
+  - <Resource management>
+  - <Implants>
 
 ## Targeted platforms
-  - <Example Platform #1 Here>
+  - <PC>
   - <Example Platform #2 Here>
   - <Example Platform #3 Here>
 
@@ -84,12 +84,12 @@ Revision: 0.0.1
     - Total Costs with breakdown
 
 ## Influences (Brief)
-  - Influence #1
-    - Medium (Television, Games, Literature, Movies, etc.)
-    - /Explain why this is an influence in 1 Paragraph or less/
-  - Influence #2
-    - Medium (Television, Games, Literature, Movies, etc.)
-    - /Explain why this is an influence in 1 Paragraph or less/
+  - Zero Sievert 
+    - Game
+    - Resource management system,
+  - Outer Wilds
+    - Game
+    - The way the game restarts will be remeniscent of how it worked here.
   - Influence #3
     - Medium (Television, Games, Literature, Movies, etc.)
     - /Explain why this is an influence in 1 Paragraph or less/
@@ -119,17 +119,26 @@ Pretend that your were pitching your game to a executive going to the elevator. 
   - <Reason #4>
   - <etc.>
 
-## Core Gameplay Mechanics (Detailed)
-  - [Core Gameplay Mechanic #1]
-    - [Details] /Describe in 2 Paragraphs or less/
+##Core Gameplay Mechanics (Detailed)
+  - Combat
+    - [Details] 
     - [How it works] /Describe in 2 Paragraphs or less/
-  - [Core Gameplay Mechanic #2]
-    - [Details] /Describe in 2 Paragraphs or less/
+  - Exploration
+    - [Details] 
     - [How it works] /Describe in 2 Paragraphs or less/
-  - [Core Gameplay Mechanic #3]
-    - [Details] /Describe in 2 Paragraphs or less/
+  - Resource Management
+    - The first resource is Health. When it runs out, you die. Can be depleted by combat and environmental hazarads.
+    - The second resource is your Heat. As it falls lower, you are debuffed and eventually start losing life.
+    - The third resource is Heat Producers. These are corpses and similar environmental objects you use to warm yourself up so you don't freeze. The reactor is your primary heat producer for the first part of the game.
+    - The fourth resource is Energy. It is used to power your implants.
+    - The fifth resource is the Countdown of the reactor. It can be used to get implants if a player finds an implant station.
+    - Inventory resources:
+	    - The first resource is Fuel. Different fuels can be gathered to keep the player warm, or even be used as ammunition.
+	    - The second resource is Catalysts. They ignite Fuel you have when interacting with the right Heat Producer and generate heat.
+	    - The third resource is items that affect combat. These include guns, their bullets and attachments, melee weapons.
+	    - The fourth resource is cybernetic implant blueprints. They are rare and can be obtained mainly through exploration. Upon reaching implant station become permanently accessible.
     - [How it works] /Describe in 2 Paragraphs or less/
-  - [Core Gameplay Mechanic #4]
+  - Implants
     - [Details] /Describe in 2 Paragraphs or less/
     - [How it works] /Describe in 2 Paragraphs or less/
 
