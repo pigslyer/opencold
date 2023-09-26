@@ -72,7 +72,7 @@ func fire_weapon() -> void: # TODO: Implement actual weapons, this is just magic
 	else:
 		ray_end += position
 	
-	get_tree().root.add_child(BulletTrace.shoot_at(position, ray_end)) 
+	get_tree().root.add_child(BulletTrace.make(position, ray_end)) 
 
 func _process(delta: float) -> void:
 	if heat <= 24.0:
