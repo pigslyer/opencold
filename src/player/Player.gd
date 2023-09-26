@@ -52,7 +52,7 @@ func _physics_process(delta: float) -> void:
 func _process(delta: float) -> void:
 	if heat <= 24.0:
 		#Fucking die instantly
-		die()
+		kill()
 
 ## Function that takes in [HeatData] to calculate changes to the [Player]'s internal temperature.
 func alter_heat(heat_data: HeatData) -> void:
@@ -66,8 +66,8 @@ func alter_heat(heat_data: HeatData) -> void:
 func damage(data: DamageData) -> void:
 	health -= data.damage
 	if health <= 0.0:
-		die()
+		kill()
 
 ## Function that handles what happens when death occurs.
-func die() -> void:
+func kill() -> void:
 	print("Man, I'm dead. (SkullEmoji)")
