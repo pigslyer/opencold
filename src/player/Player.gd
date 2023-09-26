@@ -18,6 +18,7 @@ const RAY_ANGLE_OFFSET: float = 0.04
 
 @onready var collision_shape: CollisionShape2D = $BodyShape;
 @onready var human_model: HumanoidModel = $HumanoidModel;
+@onready var camera: Camera2D = $HumanoidModel/Camera;
 
 ## The Player's body heat in Celsius
 var heat: float = 37.0
@@ -28,7 +29,9 @@ var max_health: float = 100.0
 var health: float = max_health
 
 func _physics_process(delta: float) -> void:
-	var facing_angle: float = get_local_mouse_position().angle();
+	var mouse_position: Vector2 = get_local_mouse_position();
+	camera.position.x = 0.3 * mouse_position.length();
+	var facing_angle: float = mouse_position.angle();
 	human_model.set_facing_target_angle(facing_angle);
 	
 	var input: Vector2 = Input.get_vector("mv_left", "mv_right", "mv_up", "mv_down");

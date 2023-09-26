@@ -29,6 +29,7 @@ deceleration_speed = 1000.0
 
 [node name="Camera" type="Camera2D" parent="HumanoidModel"]
 position = Vector2(150, 0)
+position_smoothing_enabled = true
 
 [node name="BodyShape" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_6ijbq")
