@@ -24,11 +24,11 @@ func _process(delta: float) -> void:
 ## Static function for spawning in bullet traces and dealing damage to the target. [br]
 ## Takes [param start] as the starting position of the trace. [br]
 ## Takes [param end] as the end position of the trace. [br]
-static func make(start: Vector2, end: Vector2) -> BulletTrace:
+static func make(start: Vector2, end: Vector2) -> void:
 	var bullet_trace: Node = preload("res://src/bullet_trace/BulletTrace.tscn").instantiate()
 	bullet_trace.position = start
 	bullet_trace.add_point(Vector2.ZERO)
 	bullet_trace.add_point(end - start)
 	bullet_trace.lifetime = end.length() / TRACE_LIFETIME_FACTOR
 	bullet_trace.life = bullet_trace.lifetime
-	return bullet_trace
+	Global.get_tree().root.add_child(bullet_trace) # TODO: Implement properly
