@@ -15,6 +15,11 @@ extends CharacterBody2D
 ## The Player's body heat in Celsius
 var heat: float = 37.0
 
+## The Player's max health
+var max_health: float = 100.0
+## The Player's current health
+var health: float = max_health
+
 func _physics_process(delta: float) -> void:
 	var facing_angle: float = get_local_mouse_position().angle();
 	human_model.set_facing_target_angle(facing_angle);
@@ -39,16 +44,30 @@ func _physics_process(delta: float) -> void:
 	
 	move_and_slide();
 	
+	if Input.is_action_just_pressed("use_held"): # TODO: Implement actual weapons, this is just magic bullets currently.
+		BulletTrace.shoot_at(self, facing_angle, 10.0) # Temp magic number ( damage of the weapon used )
+	
 	collision_shape.rotation = human_model.get_body_angle();
 
 func _process(delta: float) -> void:
 	if heat <= 24.0:
 		#Fucking die instantly
-		print("Man, I'm dead. (SkullEmoji)")
+		die()
 
+## Function that takes in [HeatData] to calculate changes to the [Player]'s internal temperature.
 func alter_heat(heat_data: HeatData) -> void:
 	var heat_diff = heat_data.target_internal_heat - heat
 	
 	if heat_diff < 0.0 and heat_data.warm_up_only:
 		return
 	heat += heat_diff * heat_data.heat_rate
+
+## Function that takes in [DamageData] to calculate how much damage the [Player] takes.
+func damage(data: DamageData):
+	health -= data.damage
+	if health <= 0.0:
+		die()
+
+## Function that handles what happens when death occurs.
+func die() -> void:
+	print("Man, I'm dead. (SkullEmoji)")
