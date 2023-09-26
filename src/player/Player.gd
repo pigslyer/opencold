@@ -61,7 +61,7 @@ func fire_weapon() -> void: # TODO: Implement actual weapons, this is just magic
 	var facing_angle: float = get_local_mouse_position().angle() + ((randf() - 0.5) * RAY_ANGLE_OFFSET)
 	var ray_end: Vector2 = Vector2(RAY_DISTANCE * cos(facing_angle), RAY_DISTANCE * sin(facing_angle))
 	
-	var query = PhysicsRayQueryParameters2D.create(position, position + ray_end)
+	var query = PhysicsRayQueryParameters2D.create(position, position + ray_end, 0b1 | 0b100)
 	var result = space_state.intersect_ray(query)
 	
 	if result:
