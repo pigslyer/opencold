@@ -63,7 +63,7 @@ func alter_heat(heat_data: HeatData) -> void:
 	heat += heat_diff * heat_data.heat_rate
 
 ## Function that takes in [DamageData] to calculate how much damage the [Player] takes.
-func damage(data: DamageData):
+func damage(data: DamageData) -> void:
 	health -= data.damage
 	if health <= 0.0:
 		die()
