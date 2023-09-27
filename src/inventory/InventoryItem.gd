@@ -22,11 +22,13 @@ extends Resource
 @export var size: Vector2i = Vector2.ONE;
 
 @warning_ignore("shadowed_variable")
-static func create_custom(id: String, name: String, icon: Texture2D) -> InventoryItem:
+static func create_custom(id: String, name: String, icon: Texture2D, stack_size: int, size: Vector2i) -> InventoryItem:
 	var item := InventoryItem.new();
 	
 	item.id = id;
 	item.name = name;
 	item.icon = icon;
+	item.stack_size = stack_size;
+	item.size = size;
 	
 	return item;

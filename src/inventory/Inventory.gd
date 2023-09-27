@@ -71,10 +71,6 @@ func add_item(item_data: InventoryItem, count: int) -> int:
 	return count;
 
 func add_item_at_position(item_data: InventoryItem, count: int, pos: Vector2i, rotated: bool) -> void:
-	var correctly_rotated: Vector2i = item_data.size if not rotated else Vector2i(item_data.size.y, item_data.size.x);
-	
-	assert(can_fit_item(pos, correctly_rotated, null), "Attempting to add item that cannot fit into inventory");
-	
 	var new_item := InventoryItemStack.new(
 			item_data,
 			min(item_data.stack_size, count),
@@ -82,10 +78,14 @@ func add_item_at_position(item_data: InventoryItem, count: int, pos: Vector2i, r
 			rotated
 	);
 	
+	var size: Vector2i = new_item.get_rotated_size();
+	
+	assert(can_fit_item(pos, size), "Attempting to add item that cannot fit into inventory");
+	
 	_items.push_back(new_item);
 	
-	for x in range(pos.x, pos.x + correctly_rotated.x):
-		for y in range(pos.y, pos.y + correctly_rotated.y):
+	for x in range(pos.x, pos.x + size.x):
+		for y in range(pos.y, pos.y + size.y):
 			_positionCache[Vector2i(x, y)] = new_item;
 	
 	inventory_changed.emit();
@@ -104,7 +104,7 @@ func take_item_count(id: String, count: int) -> bool:
 	return true;
 
 
-func can_fit_item(item_pos: Vector2i, item_size: Vector2i, ignoring_item: InventoryItemStack) -> bool:
+func can_fit_item(item_pos: Vector2i, item_size: Vector2i, ignoring_item: InventoryItemStack = null) -> bool:
 	if item_pos.x < 0 or item_pos.y < 0:
 		return false;
 	

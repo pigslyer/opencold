@@ -14,7 +14,7 @@ var count: int:
 var position: Vector2i;
 
 ## Whether or not this stack is rotated by 90°.
-var rotated: bool;
+var rotated: bool = false;
 
 @warning_ignore("shadowed_variable")
 func _init(item_data: InventoryItem, item_count: int, position: Vector2i, rotated: bool):
@@ -26,3 +26,12 @@ func _init(item_data: InventoryItem, item_count: int, position: Vector2i, rotate
 func _set_item_count(new_count: int) -> void:
 	assert(new_count >= 1 || new_count <= data.stack_size, "Attempted to set item count to value outside of item's range (%s -> [1, %s] for item with id %s))" % [new_count, data.stack_size, data.id]);
 	count = new_count;
+
+func get_rotated_size() -> Vector2i:
+	return data.size if not rotated else Vector2i(data.size.y, data.size.x);
+
+func get_rotated_angle() -> float:
+	return 0 if not rotated else PI / 2;
+
+func get_rotated_offset() -> Vector2:
+	return Vector2(get_rotated_size().x if rotated else 0, 0);

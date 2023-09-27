@@ -1,0 +1,60 @@
+[gd_scene load_steps=2 format=3 uid="uid://dbvtstqs07mf3"]
+
+[sub_resource type="GDScript" id="GDScript_qurt0"]
+script/source = "extends Control
+
+const EXPANSION_RATE: float = 1000;
+
+var _wrapping_item: InventoryDraggedItem;
+
+@onready var icon: TextureRect = $ItemIcon;
+@onready var count_pivot: Node2D = $Corner/StablePivot;
+@onready var count: Label = $Corner/StablePivot/ItemCount;
+
+func setup(wrapping_item: InventoryDraggedItem) -> void:
+	_wrapping_item = wrapping_item;
+
+func _ready():
+	if _wrapping_item == null:
+		push_error(\"No wrapping item given before ready!\");
+		return;
+	
+	icon.texture = _wrapping_item.item_data.data.icon;
+	size = _get_target_size();
+	pivot_offset = icon.texture.get_size() / 2;
+	count.text = str(_wrapping_item.item_data.count);
+
+
+func _process(delta: float) -> void:
+	size = size.move_toward(_get_target_size(), EXPANSION_RATE * delta);
+
+func _input(ev: InputEvent) -> void:
+	if ev is InputEventMouseButton and ev.pressed and ev.button_index == MOUSE_BUTTON_RIGHT:
+		_set_rotated(not _wrapping_item.rotated);
+	
+	if ev is InputEventMouseMotion:
+		queue_redraw();
+
+func _get_target_size() -> Vector2:
+	return Vector2(_wrapping_item.item_data.data.size) * _wrapping_item.target_rect_edge;
+
+func _set_rotated(rotated: bool) -> void:
+	_wrapping_item.rotated = rotated;
+	
+	if rotated:
+		rotation_degrees = 270;
+		count_pivot.rotation_degrees = -270;
+	else:
+		rotation_degrees = 0;
+		count_pivot.rotation_degrees = 0;
+
+"
+
+[node name="InventoryDraggedItemPreview" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_qurt0")

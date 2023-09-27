@@ -17,6 +17,12 @@ border_width_bottom = 4
 border_color = Color(0, 0, 0, 1)
 
 [resource]
-InventoryRenderer/colors/grid_line_color = Color(0.458824, 0.572549, 0.854902, 1)
+InventoryRenderer/colors/dragged_item_modulate = Color(0.301961, 0.301961, 0.301961, 0.847059)
+InventoryRenderer/colors/hover = Color(0.470588, 0.568627, 1, 0.352941)
+InventoryRenderer/colors/hover_invalid = Color(0.968627, 0, 0, 0.356863)
+InventoryRenderer/colors/hover_invalid_outline = Color(1, 0, 0, 0.741176)
+InventoryRenderer/colors/hover_outline = Color(0.356863, 0.541176, 1, 0.647059)
+InventoryRenderer/colors/hover_valid = Color(0, 0.72549, 0, 0.486275)
+InventoryRenderer/colors/hover_valid_outline = Color(0, 0.733333, 0, 0.764706)
 InventoryRenderer/styles/cell_empty = SubResource("StyleBoxFlat_g8rgh")
 InventoryRenderer/styles/cell_filled = SubResource("StyleBoxFlat_7nof0")
