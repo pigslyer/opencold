@@ -23,7 +23,7 @@ extends Resource
 ## The size of this item in grid cells.
 @export var size: Vector2i = Vector2.ONE;
 
-var behaviour: Script;
+var _behaviour: Script;
 
 @warning_ignore("shadowed_variable")
 static func create_custom(id: String, name: String, icon: Texture2D, stack_size: int, size: Vector2i, behaviour: Script = null) -> InventoryItem:
@@ -39,6 +39,14 @@ static func create_custom(id: String, name: String, icon: Texture2D, stack_size:
 	return item;
 
 
+func get_behaviour_instance() -> InventoryItemBehaviour:
+	if _behaviour == null:
+		return null;
+	
+	var ref_counted := RefCounted.new();
+	ref_counted.set_script(_behaviour);
+	return ref_counted;
+
 
 func _get_property_list() -> Array[Dictionary]:
 	return [
@@ -52,16 +60,16 @@ func _get_property_list() -> Array[Dictionary]:
 
 func _get(property: StringName) -> Variant:
 	if property == "item_behaviour":
-		return behaviour;
+		return _behaviour;
 	
 	return null;
 
 func _set(property: StringName, value: Variant) -> bool:
 	if property == "item_behaviour":
 		if value is Script and _does_type_inherit_from_item_behaviour(value):
-			behaviour = value;
+			_behaviour = value;
 		else:
-			behaviour = null;
+			_behaviour = null;
 		
 		return true;
 	

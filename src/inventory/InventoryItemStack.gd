@@ -34,7 +34,7 @@ func get_rotated_size() -> Vector2i:
 	return data.size if not rotated else Vector2i(data.size.y, data.size.x);
 
 func get_rotated_angle() -> float:
-	return 0 if not rotated else PI / 2;
+	return 0.0 if not rotated else PI / 2;
 
 func get_rotated_offset() -> Vector2:
 	return Vector2(get_rotated_size().x if rotated else 0, 0);

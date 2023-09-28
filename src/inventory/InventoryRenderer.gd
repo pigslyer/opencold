@@ -178,7 +178,7 @@ func _drop_data(at_position: Vector2, data: Variant) -> void:
 	var render_data: RenderData = _get_render_data();
 	var tile_pos := Vector2i((at_position - render_data.offset) / render_data.item_edge);
 	
-	_inventory.add_item_at_position(data.stack.data, data.stack.count, tile_pos, data.rotated);
+	_inventory.add_item_at_position(data.stack.data, data.stack.count, tile_pos, data.rotated, data.stack.instance_data);
 	
 	queue_redraw();
 

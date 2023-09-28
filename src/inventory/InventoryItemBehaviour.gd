@@ -2,11 +2,11 @@ class_name InventoryItemBehaviour
 extends RefCounted
 
 
-func _don() -> void:
+func equip(_data: InventoryUsageData) -> void:
 	pass
 
-func _update() -> void:
+func update(_data: InventoryUsageData) -> void:
 	pass
 
-func _doff() -> void:
+func unequip(_data: InventoryUsageData) -> void:
 	pass

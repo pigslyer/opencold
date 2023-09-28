@@ -20,6 +20,8 @@ const RAY_ANGLE_OFFSET: float = 0.04
 @onready var human_model: HumanoidModel = $HumanoidModel;
 @onready var camera: Camera2D = $HumanoidModel/Camera;
 
+@onready var player_equipment: Control = $CanvasLayer/PlayerEquipment;
+
 ## The Player's body heat in Celsius
 var heat: float = 37.0
 
@@ -27,6 +29,9 @@ var heat: float = 37.0
 var max_health: float = 100.0
 ## The Player's current health
 var health: float = max_health
+
+var _equipped_item: InventoryItemStack;
+var _equipped_item_behaviour: InventoryItemBehaviour = null;
 
 func _physics_process(delta: float) -> void:
 	var mouse_position: Vector2 = get_local_mouse_position();
@@ -54,8 +59,15 @@ func _physics_process(delta: float) -> void:
 	
 	move_and_slide();
 	
+	if _equipped_item_behaviour != null:
+		_equipped_item_behaviour.update(_generate_item_usage_data());
+	
+	# remove and replace with item behaviour usage
 	if Input.is_action_just_pressed("use_held"):
 		fire_weapon()
+	
+	if Input.is_action_just_pressed("inventory"):
+		player_equipment.visible = not player_equipment.visible;
 	
 	collision_shape.rotation = human_model.get_body_angle();
 
@@ -99,3 +111,29 @@ func damage(data: DamageData) -> void:
 ## Function that handles what happens when death occurs.
 func kill() -> void:
 	print("Man, I'm dead. (SkullEmoji)")
+
+
+func _on_player_inventory_on_item_equipped(item: InventoryItemStack) -> void:
+	if _equipped_item == item:
+		return;
+	
+	if _equipped_item_behaviour != null:
+		_equipped_item_behaviour.unequip(_generate_item_usage_data());
+	
+	_equipped_item_behaviour = null;
+	_equipped_item = null;
+	
+	if item == null:
+		return;
+	
+	_equipped_item = item;
+	_equipped_item_behaviour = _equipped_item.data.get_behaviour_instance();
+	
+	if _equipped_item_behaviour != null:
+		_equipped_item_behaviour.equip(_generate_item_usage_data());
+
+func _generate_item_usage_data() -> InventoryUsageData:
+	if _equipped_item.data.stack_size == 1:
+		return InventoryUsageData.new(self, _equipped_item.instance_data);
+	else:
+		return InventoryUsageData.new(self, {});
