@@ -1,0 +1,44 @@
+[gd_scene load_steps=6 format=3 uid="uid://umsi6gf01cim"]
+
+[ext_resource type="Script" path="res://src/bullet_trace/BulletTrace.gd" id="1_dl04r"]
+
+[sub_resource type="Shader" id="Shader_5lr2o"]
+resource_local_to_scene = true
+code = "shader_type canvas_item;
+
+uniform float lifetime = 0.2;
+uniform float life = 0.2;
+
+void fragment() {
+	float UVy = (0.5 - abs(UV.y - 0.5)) * 0.2;
+	vec2 moving_uv = vec2(UV.x - (1.0 - (life / lifetime)) * 1.5 + UVy, UV.y);
+	vec4 in_tex = texture(TEXTURE, moving_uv);
+	in_tex.a *= (life / lifetime);
+	COLOR = in_tex;
+}
+
+void vertex() {
+	
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c1fp2"]
+resource_local_to_scene = true
+shader = SubResource("Shader_5lr2o")
+shader_parameter/lifetime = 0.2
+shader_parameter/life = 0.2
+
+[sub_resource type="Gradient" id="Gradient_uuk07"]
+offsets = PackedFloat32Array(0, 0.5)
+colors = PackedColorArray(1, 0.862745, 0, 0, 1, 0.52549, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ma1xn"]
+gradient = SubResource("Gradient_uuk07")
+width = 128
+
+[node name="BulletTrace" type="Line2D"]
+material = SubResource("ShaderMaterial_c1fp2")
+width = 5.0
+texture = SubResource("GradientTexture1D_ma1xn")
+texture_mode = 2
+end_cap_mode = 2
+script = ExtResource("1_dl04r")

@@ -18,7 +18,7 @@ point_count = 3
 radius = 40.0
 height = 186.0
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" groups=["PLAYER"]]
 script = ExtResource("1_gnilo")
 acceleration_curve = SubResource("Curve_lcvly")
 speed_curve = SubResource("Curve_4q03m")
@@ -29,6 +29,7 @@ deceleration_speed = 1000.0
 
 [node name="Camera" type="Camera2D" parent="HumanoidModel"]
 position = Vector2(150, 0)
+position_smoothing_enabled = true
 
 [node name="BodyShape" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_6ijbq")
