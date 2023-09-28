@@ -31,3 +31,4 @@ offset_right = 1188.0
 offset_bottom = 549.0
 editor_only = false
 script = ExtResource("1_w2atr")
+_display_selection = false

@@ -4,18 +4,15 @@ extends RefCounted
 var stack: InventoryItemStack;
 var source_inventory: Inventory;
 
-var is_captured: bool;
 var rotated: bool;
 var target_edge_length: float;
-var target_global_position: Vector2;
 
 @warning_ignore("shadowed_variable")
-func _init(item_stack: InventoryItemStack, source_inventory: Inventory, starting_global_position: Vector2) -> void:
+func _init(item_stack: InventoryItemStack, source_inventory: Inventory) -> void:
 	self.stack = item_stack;
 	self.source_inventory = source_inventory;
 	self.rotated = item_stack.rotated;
 	target_edge_length = 0;
-	target_global_position = starting_global_position;
 
 func generate_preview() -> Control:
 	return Preview.new(self);
@@ -29,18 +26,14 @@ func get_rotated_angle() -> float:
 func get_rotated_offset() -> Vector2:
 	return Vector2(get_rotated_size().x if rotated else 0, 0);
 
-
 class Preview extends Control:
 	const FOLLOW_SPEED: float = 1600;
-	const EDGE_CORRECTION_RATE: float = 100;
+	const EDGE_CORRECTION_RATE: float = 500;
 	
-	const ROTATION_TIME: float = 0.3;
+	const ROTATION_TIME: float = 0.15;
 	
 	var _wrapping_item: InventoryDraggedItem;
 	
-	var _is_captured: bool;
-	
-	var _current_global_position: Vector2;
 	var _rotation_offset: Vector2;
 	
 	var _edge_length: float;
@@ -49,7 +42,6 @@ class Preview extends Control:
 	func _init(wrapping_item: InventoryDraggedItem) -> void:
 		_wrapping_item = wrapping_item;
 		
-		_current_global_position = wrapping_item.target_global_position;
 		_rotation_offset = wrapping_item.get_rotated_offset();
 		
 		_edge_length = wrapping_item.target_edge_length;
@@ -77,6 +69,9 @@ class Preview extends Control:
 		draw_set_transform(Vector2.ZERO, 0);
 		
 		var rotated_item_size: Vector2 = item_size.rotated(_rotation);
+		
+		if _wrapping_item.stack.data.stack_size == 1:
+			return;
 		
 		const COUNT_FONT_SIZE: int = 20;
 		const MARGIN = Vector2(-8, -8);

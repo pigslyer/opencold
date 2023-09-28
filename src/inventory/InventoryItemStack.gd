@@ -16,12 +16,15 @@ var position: Vector2i;
 ## Whether or not this stack is rotated by 90°.
 var rotated: bool = false;
 
+var instance_data: Dictionary;
+
 @warning_ignore("shadowed_variable")
-func _init(item_data: InventoryItem, item_count: int, position: Vector2i, rotated: bool):
+func _init(item_data: InventoryItem, item_count: int, position: Vector2i, rotated: bool, instance_data: Dictionary) -> void:
 	self.data = item_data;
 	self.count = item_count;
 	self.position = position;
 	self.rotated = rotated;
+	self.instance_data = instance_data;
 
 func _set_item_count(new_count: int) -> void:
 	assert(new_count >= 1 || new_count <= data.stack_size, "Attempted to set item count to value outside of item's range (%s -> [1, %s] for item with id %s))" % [new_count, data.stack_size, data.id]);

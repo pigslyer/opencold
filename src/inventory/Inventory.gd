@@ -70,22 +70,23 @@ func add_item(item_data: InventoryItem, count: int) -> int:
 	
 	return count;
 
-func add_item_at_position(item_data: InventoryItem, count: int, pos: Vector2i, rotated: bool) -> void:
+func add_item_at_position(item_data: InventoryItem, count: int, pos: Vector2i, rotated: bool, instance_data: Dictionary = {}) -> void:
 	var new_item := InventoryItemStack.new(
 			item_data,
 			min(item_data.stack_size, count),
 			pos,
-			rotated
+			rotated,
+			instance_data
 	);
 	
-	var size: Vector2i = new_item.get_rotated_size();
+	var corr_size: Vector2i = new_item.get_rotated_size();
 	
-	assert(can_fit_item(pos, size), "Attempting to add item that cannot fit into inventory");
+	assert(can_fit_item(pos, corr_size), "Attempting to add item that cannot fit into inventory");
 	
 	_items.push_back(new_item);
 	
-	for x in range(pos.x, pos.x + size.x):
-		for y in range(pos.y, pos.y + size.y):
+	for x in range(pos.x, pos.x + corr_size.x):
+		for y in range(pos.y, pos.y + corr_size.y):
 			_positionCache[Vector2i(x, y)] = new_item;
 	
 	inventory_changed.emit();
@@ -99,8 +100,42 @@ func get_item_count(id: String) -> int:
 	
 	return count;
 
+func take_item_stack(stack: InventoryItemStack) -> void:
+	var idx: int = _items.find(stack);
+	assert(idx != -1, "Item stack not present in this inventory!");
+	
+	_items.remove_at(idx);
+	var corr_size: Vector2i = stack.get_rotated_size();
+	
+	for x in range(stack.position.x, stack.position.x + corr_size.x):
+		for y in range(stack.position.y, stack.position.y + corr_size.y):
+			_positionCache.erase(Vector2i(x, y));
+	
+	inventory_changed.emit();
 
 func take_item_count(id: String, count: int) -> bool:
+	if get_item_count(id) < count:
+		return false;
+	
+	var starting_count: int = count;
+	
+	var sort_func = func(a: InventoryItemStack, b: InventoryItemStack):
+		return a.count < b.count;
+	
+	var items: Array[InventoryItemStack] = _find_stacks_by_id(id);
+	items.sort_custom(sort_func);
+	
+	for item in items:
+		if item.count < count:
+			count -= item.count;
+			take_item_stack(item);
+		else:
+			item.count -= count;
+			break;
+	
+	if starting_count != count:
+		inventory_changed.emit();
+	
 	return true;
 
 

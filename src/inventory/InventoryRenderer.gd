@@ -1,184 +1,49 @@
 class_name InventoryRenderer;
 extends Control
 
+signal item_selected(item: InventoryItemStack);
+signal inventory_content_changed();
+
+## Whether or not to display the selection rectangle over clicked on items.
+## Has no impact on selection logic.
+@export var _display_selection: bool = true;
+
+## Whether or not to display the hover effect over items.
+@export var _display_hover: bool = true;
+
 var _inventory: Inventory;
+
+var _rendering_any_drags: bool;
+@onready var _hover := ItemSelection.new(self, _display_hover);
+@onready var _selection := ItemSelection.new(self, _display_selection);
 
 func _ready() -> void:
 	mouse_exited.connect(_on_mouse_exited);
 
 func set_inventory(inventory: Inventory) -> void:
-	_inventory = inventory;
-	inventory.inventory_changed.connect(queue_redraw);
+	if _inventory != null:
+		_inventory.inventory_changed.disconnect(_on_inventory_changed);
 	
-	_clear_hover();
+	_inventory = inventory;
+	inventory.inventory_changed.connect(_on_inventory_changed);
+	
+	_hover.clear();
 	queue_redraw();
+
+func _on_inventory_changed():
+	queue_redraw();
+	inventory_content_changed.emit();
 
 func _on_mouse_exited():
 	var drag_data = get_viewport().gui_get_drag_data();
-	_clear_hover();
+	_hover.clear();
 	
 	if not drag_data is InventoryDraggedItem:
 		return;
 	
 	drag_data = drag_data as InventoryDraggedItem;
 
-func _get_drag_data(at_position: Vector2) -> Variant:
-	if _inventory == null:
-		return null;
-	
-	var render_data: RenderData = _get_render_data();
-	var tile_pos := Vector2i((at_position - render_data.offset) / render_data.item_edge);
-	var items: Dictionary = _inventory.get_all_items_by_position();
-	var item_at_pos: InventoryItemStack = items.get(tile_pos);
-	
-	if item_at_pos == null:
-		return null;
-	
-	var drag_data := InventoryDraggedItem.new(item_at_pos, _inventory, global_position + render_data.offset + Vector2(tile_pos) * render_data.item_edge);
-	var preview := drag_data.generate_preview();
-	
-	set_drag_preview(preview);
-	queue_redraw();
-	return drag_data;
 
-func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
-	if _inventory == null:
-		return false;
-	
-	if not data is InventoryDraggedItem:
-		return false;
-	
-	var render_data: RenderData = _get_render_data();
-	
-	if at_position.x < render_data.offset.x or at_position.y < render_data.offset.y:
-		return false;
-	
-	if at_position.x > size.x - render_data.offset.x or at_position.y > size.y - render_data.offset.y:
-		return false;
-	
-	var tile_pos := Vector2i((at_position - render_data.offset) / render_data.item_edge);
-	
-	return _inventory.can_fit_item(tile_pos, data.get_rotated_size(), data.stack);
-
-func _drop_data(at_position: Vector2, data: Variant) -> void:
-	queue_redraw();
-
-func _gui_input(ev: InputEvent) -> void:
-	if not ev is InputEventMouse:
-		return
-	
-	var drag_data = get_viewport().gui_get_drag_data();
-	
-	var render_data: RenderData = _get_render_data();
-	var tile_pos := Vector2i((ev.position - render_data.offset) / render_data.item_edge);
-	
-	if tile_pos.x < 0 or tile_pos.y < 0:
-		_clear_hover();
-		return;
-	
-	if tile_pos.x >= _inventory.size.x or tile_pos.y >= _inventory.size.y:
-		_clear_hover();
-		return;
-	
-	var hover_color: Color;
-	var hover_outline: Color;
-	
-	if drag_data is InventoryDraggedItem:
-		var correct_size: Vector2i = drag_data.get_rotated_size();
-		
-		if tile_pos.x + correct_size.x - 1 >= _inventory.size.x:
-			_clear_hover();
-			return;
-		
-		if tile_pos.y + correct_size.y - 1 >= _inventory.size.y:
-			_clear_hover();
-			return;
-		
-		drag_data.target_edge_length = render_data.item_edge;
-		
-		if _inventory.can_fit_item(tile_pos, drag_data.get_rotated_size(), drag_data.stack):
-			hover_color = get_theme_color("hover_valid", "InventoryRenderer");
-			hover_outline = get_theme_color("hover_valid_outline", "InventoryRenderer");
-		else:
-			hover_color = get_theme_color("hover_invalid", "InventoryRenderer");
-			hover_outline = get_theme_color("hover_invalid_outline", "InventoryRenderer");
-		
-		_set_hover(tile_pos, drag_data.get_rotated_size(), hover_color, hover_outline);
-	else:
-		hover_color = get_theme_color("hover", "InventoryRenderer");
-		hover_outline = get_theme_color("hover_outline", "InventoryRenderer");
-		
-		var item_at_pos: InventoryItemStack = _inventory.get_all_items_by_position().get(tile_pos);
-		
-		if item_at_pos == null:
-			_set_hover(tile_pos, Vector2i.ONE, hover_color, hover_outline);
-		else:
-			_set_hover(item_at_pos.position, item_at_pos.get_rotated_size(), hover_color, hover_outline);
-		
-
-class HoverPreview extends ColorRect:
-	const INTERP_SPEED: float = 0.3;
-	const FADE_OUT_SPEED: float = 0.6;
-	
-	var _ref_rect: ReferenceRect;
-	
-	func _init(starting_position: Vector2, starting_size: Vector2) -> void:
-		position = starting_position;
-		size = starting_size;
-		mouse_filter = MOUSE_FILTER_IGNORE;
-		
-		color = Color.TRANSPARENT;
-		
-		var reference_rect := ReferenceRect.new();
-		add_child(reference_rect);
-		reference_rect.set_anchors_preset(PRESET_FULL_RECT);
-		reference_rect.editor_only = false;
-		reference_rect.border_color = color;
-		reference_rect.mouse_filter = MOUSE_FILTER_IGNORE;
-		
-		_ref_rect = reference_rect;
-	
-	func set_rect(local_pos: Vector2, local_size: Vector2) -> void:
-		var tween := create_tween().set_parallel();
-		
-		tween.tween_property(self, "position", local_pos, INTERP_SPEED);
-		tween.tween_property(self, "size", local_size, INTERP_SPEED);
-	
-	func set_hover(hover_color: Color, outline_color: Color) -> void:
-		var tween := create_tween().set_parallel();
-		
-		tween.tween_property(self, "color", hover_color, INTERP_SPEED);
-		tween.tween_property(_ref_rect, "border_color", outline_color, INTERP_SPEED);
-	
-	func hide_hover() -> void:
-		var tween := create_tween();
-		
-		tween.tween_property(self, "modulate", Color(modulate, 0), FADE_OUT_SPEED);
-		tween.tween_callback(queue_free);
-
-
-var _active_hover: HoverPreview = null;
-
-func _set_hover(hover_position: Vector2i, hover_size: Vector2i, hover_color: Color, outline_color: Color) -> void:
-	var render_data: RenderData = _get_render_data();
-	
-	var hover_local_pos: Vector2 = render_data.offset + hover_position * render_data.item_edge;
-	var hover_local_size: Vector2 = hover_size * render_data.item_edge;
-	
-	if _active_hover == null:
-		_active_hover = HoverPreview.new(hover_local_pos, hover_local_size);
-		add_child(_active_hover);
-	else:
-		_active_hover.set_rect(hover_local_pos, hover_local_size);
-	
-	_active_hover.set_hover(hover_color, outline_color);
-
-func _clear_hover() -> void:
-	if _active_hover == null:
-		return;
-	
-	_active_hover.hide_hover();
-	_active_hover = null;
 
 func _draw() -> void:
 	if _inventory == null:
@@ -232,6 +97,9 @@ func _draw_items() -> void:
 	var font_size: int = get_theme_default_font_size();
 	
 	for item in _inventory.get_all_items():
+		if item.data.stack_size == 1:
+			continue;
+		
 		var text_length: float = font.get_string_size(
 				str(item.count), 
 				HORIZONTAL_ALIGNMENT_LEFT, 
@@ -258,6 +126,256 @@ func _draw_items() -> void:
 				-1, 
 				font_size
 		);
+
+
+
+func _get_drag_data(at_position: Vector2) -> Variant:
+	if _inventory == null:
+		return null;
+	
+	var render_data: RenderData = _get_render_data();
+	var tile_pos := Vector2i((at_position - render_data.offset) / render_data.item_edge);
+	var items: Dictionary = _inventory.get_all_items_by_position();
+	var item_at_pos: InventoryItemStack = items.get(tile_pos);
+	
+	if item_at_pos == null:
+		return null;
+	
+	var drag_data := InventoryDraggedItem.new(item_at_pos, _inventory);
+	var preview := drag_data.generate_preview();
+	drag_data.target_edge_length = render_data.item_edge;
+	
+	_rendering_any_drags = true;
+	set_drag_preview(preview);
+	queue_redraw();
+	_selection.clear();
+	return drag_data;
+
+func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
+	if _inventory == null:
+		return false;
+	
+	if not data is InventoryDraggedItem:
+		return false;
+	
+	var render_data: RenderData = _get_render_data();
+	
+	if at_position.x < render_data.offset.x or at_position.y < render_data.offset.y:
+		return false;
+	
+	if at_position.x > size.x - render_data.offset.x or at_position.y > size.y - render_data.offset.y:
+		return false;
+	
+	var tile_pos := Vector2i((at_position - render_data.offset) / render_data.item_edge);
+	
+	return _inventory.can_fit_item(tile_pos, data.get_rotated_size(), data.stack);
+
+func _drop_data(at_position: Vector2, data: Variant) -> void:
+	data = data as InventoryDraggedItem;
+	
+	data.source_inventory.take_item_stack(data.stack);
+	
+	var render_data: RenderData = _get_render_data();
+	var tile_pos := Vector2i((at_position - render_data.offset) / render_data.item_edge);
+	
+	_inventory.add_item_at_position(data.stack.data, data.stack.count, tile_pos, data.rotated);
+	
+	queue_redraw();
+
+
+
+
+func _gui_input(ev: InputEvent) -> void:
+	if not ev is InputEventMouse:
+		return
+	
+	var drag_data = get_viewport().gui_get_drag_data();
+	
+	var render_data: RenderData = _get_render_data();
+	var tile_pos := Vector2i((ev.position - render_data.offset) / render_data.item_edge);
+	
+	if tile_pos.x < 0 or tile_pos.y < 0:
+		_hover.clear();
+		return;
+	
+	if tile_pos.x >= _inventory.size.x or tile_pos.y >= _inventory.size.y:
+		_hover.clear();
+		return;
+	
+	var hover_color: Color;
+	var hover_outline: Color;
+	
+	if drag_data is InventoryDraggedItem:
+		drag_data.target_edge_length = render_data.item_edge;
+		
+		var correct_size: Vector2i = drag_data.get_rotated_size();
+		
+		if tile_pos.x + correct_size.x - 1 >= _inventory.size.x:
+			_hover.clear();
+			return;
+		
+		if tile_pos.y + correct_size.y - 1 >= _inventory.size.y:
+			_hover.clear();
+			return;
+		
+		if _inventory.can_fit_item(tile_pos, drag_data.get_rotated_size(), drag_data.stack):
+			hover_color = get_theme_color("hover_valid", "InventoryRenderer");
+			hover_outline = get_theme_color("hover_valid_outline", "InventoryRenderer");
+		else:
+			hover_color = get_theme_color("hover_invalid", "InventoryRenderer");
+			hover_outline = get_theme_color("hover_invalid_outline", "InventoryRenderer");
+		
+		_hover.set_selection(tile_pos, drag_data.get_rotated_size(), hover_color, hover_outline);
+	else:
+		hover_color = get_theme_color("hover", "InventoryRenderer");
+		hover_outline = get_theme_color("hover_outline", "InventoryRenderer");
+		
+		var item_at_pos: InventoryItemStack = _inventory.get_all_items_by_position().get(tile_pos);
+		
+		var hovered_rect: Rect2i;
+		
+		if item_at_pos == null:
+			hovered_rect = Rect2i(tile_pos, Vector2i.ONE);
+		else:
+			hovered_rect = Rect2i(item_at_pos.position, item_at_pos.get_rotated_size());
+		
+		_hover.set_selection(hovered_rect.position, hovered_rect.size, hover_color, hover_outline);
+		
+		# we're trying to select something
+		if ev is InputEventMouseButton && ev.pressed && ev.button_index == MOUSE_BUTTON_LEFT:
+			if _selection.get_rect() == Rect2i(hovered_rect.position, hovered_rect.size):
+				_selection.clear();
+			elif item_at_pos == null:
+				_selection.clear();
+			else:
+				var color: Color = get_theme_color("selected_color", "InventoryRenderer");
+				var outline: Color = get_theme_color("selected_outline" , "InventoryRenderer");
+				
+				_selection.set_selection(hovered_rect.position, hovered_rect.size, color, outline);
+			
+			if _selection.get_rect() != ItemSelection.NO_RECT:
+				item_selected.emit(item_at_pos);
+			else:
+				item_selected.emit(null);
+
+
+func _process(_delta: float) -> void:
+	if _rendering_any_drags and get_viewport().gui_get_drag_data() == null:
+		_selection.clear(true);
+		queue_redraw();
+		_rendering_any_drags = false;
+
+
+class ItemSelection extends RefCounted:
+	const NO_RECT: Rect2i = Rect2i(Vector2.ZERO, Vector2.ZERO);
+	
+	var _inventory_renderer: InventoryRenderer;
+	var _display: bool;
+	
+	var _selection_renderer: SelectionRenderer = null;
+	var _current_rect: Rect2i;
+	
+	func _init(inventory_renderer: InventoryRenderer, display: bool) -> void:
+		_inventory_renderer = inventory_renderer;
+		_display = display;
+	
+	func set_selection(hover_position: Vector2i, hover_size: Vector2i, hover_color: Color, outline_color: Color) -> void:
+		if not _display:
+			_current_rect = Rect2i(hover_position, hover_size);
+			return;
+		
+		var render_data: RenderData = _inventory_renderer._get_render_data();
+		
+		var hover_local_pos: Vector2 = render_data.offset + hover_position * render_data.item_edge;
+		var hover_local_size: Vector2 = hover_size * render_data.item_edge;
+		
+		if _selection_renderer == null:
+			_selection_renderer = SelectionRenderer.new(hover_local_pos, hover_local_size);
+			_inventory_renderer.add_child(_selection_renderer);
+		else:
+			_selection_renderer.set_rect(hover_local_pos, hover_local_size);
+		
+		_selection_renderer.set_hover(hover_color, outline_color);
+		_current_rect = Rect2i(hover_position, hover_size);
+	
+	func clear(instant: bool = false) -> void:
+		if not _display:
+			_current_rect = NO_RECT;
+			return;
+		
+		if _selection_renderer == null:
+			return;
+		
+		if instant:
+			_selection_renderer.queue_free();
+		else:
+			_selection_renderer.hide_hover();
+		
+		_selection_renderer = null;
+	
+	func get_rect() -> Rect2i:
+		if not _display:
+			return _current_rect
+		elif _selection_renderer == null:
+			return NO_RECT;
+		else:
+			return _current_rect;
+	
+	class SelectionRenderer extends ColorRect:
+		const INTERP_SPEED: float = 0.1;
+		const FADE_OUT_SPEED: float = 0.5;
+		
+		var _target_rect: Rect2;
+		var _target_color: Color;
+		var _target_outline: Color;
+		var _ref_rect: ReferenceRect;
+		
+		func _init(starting_position: Vector2, starting_size: Vector2) -> void:
+			position = starting_position;
+			size = starting_size;
+			mouse_filter = MOUSE_FILTER_IGNORE;
+			
+			color = Color.TRANSPARENT;
+			
+			var reference_rect := ReferenceRect.new();
+			add_child(reference_rect);
+			reference_rect.set_anchors_preset(PRESET_FULL_RECT);
+			reference_rect.editor_only = false;
+			reference_rect.border_color = color;
+			reference_rect.mouse_filter = MOUSE_FILTER_IGNORE;
+			
+			_ref_rect = reference_rect;
+			_target_rect = Rect2(starting_position, starting_size);
+		
+		func set_rect(local_pos: Vector2, local_size: Vector2) -> bool:
+			if _target_rect.is_equal_approx(Rect2(local_pos, local_size)):
+				return false;
+			
+			var tween := create_tween().set_parallel();
+			
+			tween.tween_property(self, "position", local_pos, INTERP_SPEED);
+			tween.tween_property(self, "size", local_size, INTERP_SPEED);
+			_target_rect = Rect2(local_pos, local_size);
+			return true;
+		
+		func set_hover(hover_color: Color, outline_color: Color) -> void:
+			if _target_color.is_equal_approx(hover_color) and _target_outline.is_equal_approx(outline_color):
+				return;
+			
+			var tween := create_tween().set_parallel();
+			
+			tween.tween_property(self, "color", hover_color, INTERP_SPEED);
+			tween.tween_property(_ref_rect, "border_color", outline_color, INTERP_SPEED);
+			_target_color = hover_color;
+			_target_outline = outline_color;
+		
+		func hide_hover() -> void:
+			var tween := create_tween();
+			
+			tween.tween_property(self, "modulate", Color(modulate, 0), FADE_OUT_SPEED);
+			tween.tween_callback(queue_free);
+	
+
 
 func _get_render_data() -> RenderData:
 	var inv_size := Vector2(_inventory.size);
