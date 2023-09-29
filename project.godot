@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="Opencold"
+run/main_scene="res://src/common/TestScene.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")
 config/icon="res://src/assets/icon.svg"
 
@@ -69,6 +70,7 @@ use_held={
 2d_physics/layer_3="Enemy"
 2d_physics/layer_4="Interactive"
 2d_physics/layer_5="Heat"
+2d_physics/layer_6="Holes"
 
 [rendering]
 

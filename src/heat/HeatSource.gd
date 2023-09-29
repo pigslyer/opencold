@@ -14,4 +14,4 @@ func get_heat_data(delta: float, target_pos: Vector2) -> HeatData:
 	# Return 0 if the target is too far away
 	if relative <= 0.0:
 		return HeatData.new(target_heat, 0.0, true)
-	return HeatData.new(target_heat, relative * relative * rate * delta, true)
+	return HeatData.new(target_heat, relative * rate * delta, true)
