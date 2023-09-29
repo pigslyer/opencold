@@ -1,5 +1,5 @@
 extends CharacterBody2D
-## Test class for a zombie-like enemy.
+## Test class for a human-like enemy.
 
 ## Value that dictates how fast this unit can move.
 @export_range(0.0, 1000.0, 0.5, "or_greater", "suffix:px/s") var movement_speed: float = 200.0

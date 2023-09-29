@@ -106,7 +106,7 @@ motion_mode = 1
 position = Vector2(500, 45.265)
 radius = 350.0
 target_heat = 37.0
-rate = 1.0
+rate = 0.1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HeatSource"]
 shape = SubResource("CircleShape2D_l6mkm")
@@ -121,7 +121,6 @@ collision_layer = 16
 collision_mask = 22
 script = ExtResource("7_jrmv0")
 target_heat = 16.0
-rate = 0.1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AmbientHeat"]
 position = Vector2(637, 30.5)
