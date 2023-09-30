@@ -22,6 +22,10 @@ collision_mask = 6
 [node name="Sight" type="CollisionPolygon2D" parent="AggroArea"]
 polygon = PackedVector2Array(0, 0, 500, -250, 750, -250, 750, 250, 500, 250)
 
+[node name="RayCast2D" type="RayCast2D" parent="."]
+target_position = Vector2(1000, 0)
+collision_mask = 7
+
 [node name="HumanoidModel" parent="." instance=ExtResource("2_5gfqs")]
 modulate = Color(0.933333, 0, 0.964706, 1)
 

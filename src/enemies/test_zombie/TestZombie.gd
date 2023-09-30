@@ -9,6 +9,8 @@ extends CharacterBody2D
 ## This value ought to be smaller than the [NavigationAgent2D]'s [member NavigationAgent2D.path_desired_distance] value,
 ## so that the unit actually moves in close enough to attack.
 @export_range(0.0, 1000.0, 0.5, "or_greater", "suffix:px") var attack_range: float = 150.0
+## How far away should this unit check when testing if an enemy is within the line of sight.
+@export_range(0.0, 2000.0, 0.5, "or_greater", "suffix:px") var sight_range: float = 1000.0
 ## Value that dictates how much health this unit spawns in with.
 @export_range(0.0, 200.0, 0.5, "or_greater", "suffix:hp") var max_health: float = 100.0
 ## Current health.
@@ -23,6 +25,8 @@ var current_attack_delay: float = 0.0
 @onready var navigation_agent: NavigationAgent2D = $NavigationAgent2D
 ## This unit's [Area2D]. Used for seeing enemies.
 @onready var aggro_area: Area2D = $AggroArea
+## This unit's [RayCast2D]. Used for checking the line of sight.
+@onready var ray: RayCast2D = $RayCast2D
 
 ## This unit's current [CharacterBody2D] target. If it doesn't have one, it will spin until it spots one.
 var target: CharacterBody2D = null
@@ -50,9 +54,9 @@ func _physics_process(delta: float) -> void:
 		rotation_degrees += delta * 30.0
 		for body in aggro_area.get_overlapping_bodies():
 			if body != self and body is CharacterBody2D:
-				var query = PhysicsRayQueryParameters2D.create(position, body.position, Layers.Physics2D.WORLD | Layers.Physics2D.PLAYER)
-				var result = get_world_2d().direct_space_state.intersect_ray(query)
-				if result and result.collider == body:
+				ray.rotation = -rotation
+				ray.target_position = (body.position - position).normalized() * sight_range
+				if ray.get_collider() == body:
 					target = body
 					navigation_agent.target_position = target.position
 					alert_level += delta
