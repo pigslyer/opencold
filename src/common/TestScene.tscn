@@ -101,6 +101,7 @@ navigation_polygon = SubResource("NavigationPolygon_kas31")
 [node name="TestHuman" parent="." instance=ExtResource("4_68ast")]
 position = Vector2(-836, 740)
 motion_mode = 1
+wall_min_slide_angle = 0.0
 
 [node name="HeatSource" parent="." instance=ExtResource("5_brael")]
 position = Vector2(500, 45.265)
