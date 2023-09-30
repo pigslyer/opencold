@@ -89,7 +89,8 @@ func take_damage(data: DamageData) -> void:
 	
 	if data.does_source_aggro():
 		target = data.source
-		alert_level += 0.5
+		if alert_level < 0.5:
+			alert_level = 0.5
 
 ## Function that handles what happens when death occurs.
 func kill() -> void:
