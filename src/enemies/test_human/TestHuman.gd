@@ -37,10 +37,6 @@ func _set_alert_level(new_alert_level: float) -> void:
 func _process(delta: float) -> void:
 	if target != null:
 		if alert_level > 0.0:
-			if aggro_area.get_overlapping_bodies().has(target):
-				alert_level += delta
-			else:
-				alert_level -= delta * 0.1
 			var point : Vector2 = target.position - position
 			var rad: float = atan2(point.y, point.x)
 			rotation = lerp_angle(rotation, rad, alert_level * 0.25)
@@ -62,6 +58,11 @@ func _physics_process(delta: float) -> void:
 					alert_level += 0.1
 					return
 	else:
+		if aggro_area.get_overlapping_bodies().has(target):
+			alert_level += delta
+		else:
+			alert_level -= delta * 0.1
+		
 		if current_attack_delay > 0.0:
 			current_attack_delay -= delta
 		var target_pos: Vector2 = target.position
