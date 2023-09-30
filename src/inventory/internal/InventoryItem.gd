@@ -14,6 +14,9 @@ extends Resource
 ## The display name of this item.
 @export var name: String;
 
+## A more verbose description of this item.
+@export_multiline var description: String;
+
 ## The display icon for this item.
 @export var icon: Texture2D;
 
@@ -23,22 +26,30 @@ extends Resource
 ## The size of this item in grid cells.
 @export var size: Vector2i = Vector2.ONE;
 
+## The behaviour script to be used when this item is equipped/used.
 var _behaviour: Script;
 
+## Allows creation of custom items during the runtime.
 @warning_ignore("shadowed_variable")
-static func create_custom(id: String, name: String, icon: Texture2D, stack_size: int, size: Vector2i, behaviour: Script = null) -> InventoryItem:
+static func create_custom(id: String, name: String, description: String, icon: Texture2D, stack_size: int, size: Vector2i, behaviour: Script = null) -> InventoryItem:
 	var item := InventoryItem.new();
 	
 	item.id = id;
 	item.name = name;
+	item.description = description;
 	item.icon = icon;
 	item.stack_size = stack_size;
 	item.size = size;
-	item.behaviour = behaviour;
+	
+	if behaviour != null:
+		if _does_script_inherit_from_item_behaviour(behaviour):
+			item.behaviour = behaviour;
+		else:
+			push_warning("Attempted to create custom item with behaviour which does not inherit form InventoryItemBehaviour! No behaviour will be used...");
 	
 	return item;
 
-
+## Retrieves item behaviour instance if this item has one, null otherwise.
 func get_behaviour_instance() -> InventoryItemBehaviour:
 	if _behaviour == null:
 		return null;
@@ -47,7 +58,7 @@ func get_behaviour_instance() -> InventoryItemBehaviour:
 	ref_counted.set_script(_behaviour);
 	return ref_counted;
 
-
+## Faking it so item behaviour can only be a valid script
 func _get_property_list() -> Array[Dictionary]:
 	return [
 		{
@@ -66,8 +77,11 @@ func _get(property: StringName) -> Variant:
 
 func _set(property: StringName, value: Variant) -> bool:
 	if property == "item_behaviour":
-		if value is Script and _does_type_inherit_from_item_behaviour(value):
-			_behaviour = value;
+		if value is Script:
+			if InventoryItem._does_script_inherit_from_item_behaviour(value):
+				_behaviour = value;
+			else:
+				push_warning("Cannot use %s as item behaviour because it doesn't implement InventoryItemBehaviour!" % value.resource_path);
 		else:
 			_behaviour = null;
 		
@@ -75,9 +89,10 @@ func _set(property: StringName, value: Variant) -> bool:
 	
 	return false;
 
-const _item_behaviour_script: Script = preload("res://src/inventory/InventoryItemBehaviour.gd");
+const _item_behaviour_script: Script = preload("res://src/inventory/internal/InventoryItemBehaviour.gd");
 
-func _does_type_inherit_from_item_behaviour(script: Script) -> bool:
+## Determines whether or not the given script is of type ItemBehaviour.
+static func _does_script_inherit_from_item_behaviour(script: Script) -> bool:
 	if script == _item_behaviour_script:
 		return true;
 	
@@ -86,4 +101,4 @@ func _does_type_inherit_from_item_behaviour(script: Script) -> bool:
 	if base_script == null:
 		return false;
 	
-	return _does_type_inherit_from_item_behaviour(base_script);
+	return _does_script_inherit_from_item_behaviour(base_script);

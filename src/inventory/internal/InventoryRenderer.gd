@@ -1,33 +1,58 @@
 class_name InventoryRenderer;
 extends Control
+## Renders a given inventory and handles basic input events - dragging and dropping items
+## from and to itself and selecting items.
 
+## MOVE THIS OUT
+## Emitted when an item has been selected (single clicked on)
 signal item_selected(item: InventoryItemStack);
+
+## Emitted when the contents of the contained inventory have changed.
 signal inventory_content_changed();
+
+## Possible alignments for the inventory's position.
+enum Align {
+	TOP_LEFT,
+	CENTERED,
+	BOTTOM_RIGHT,
+};
+
+@export var _grid_alignment: Align = Align.CENTERED;
 
 ## Whether or not to display the selection rectangle over clicked on items.
 ## Has no impact on selection logic.
+## MOVE THIS OUT
 @export var _display_selection: bool = true;
 
 ## Whether or not to display the hover effect over items.
 @export var _display_hover: bool = true;
 
+## The inventory being rendered.
 var _inventory: Inventory;
 
+## Whether or not the inventory is the source of any [InventoryDraggedItem]s.
+## Important because it has to clear the dragged overlay off the dragged item.
 var _rendering_any_drags: bool;
+
 @onready var _hover := ItemSelection.new(self, _display_hover);
 @onready var _selection := ItemSelection.new(self, _display_selection);
 
 func _ready() -> void:
 	mouse_exited.connect(_on_mouse_exited);
 
+## Sets the rendered inventory.
 func set_inventory(inventory: Inventory) -> void:
+	if _inventory == inventory:
+		return;
+	
 	if _inventory != null:
 		_inventory.inventory_changed.disconnect(_on_inventory_changed);
 	
 	_inventory = inventory;
-	inventory.inventory_changed.connect(_on_inventory_changed);
+	_inventory.inventory_changed.connect(_on_inventory_changed);
 	
 	_hover.clear();
+	_selection.clear();
 	queue_redraw();
 
 func _on_inventory_changed():
@@ -35,14 +60,7 @@ func _on_inventory_changed():
 	inventory_content_changed.emit();
 
 func _on_mouse_exited():
-	var drag_data = get_viewport().gui_get_drag_data();
 	_hover.clear();
-	
-	if not drag_data is InventoryDraggedItem:
-		return;
-	
-	drag_data = drag_data as InventoryDraggedItem;
-
 
 
 func _draw() -> void:
@@ -51,7 +69,9 @@ func _draw() -> void:
 	
 	_draw_grid();
 	_draw_items();
+	_draw_item_numbers();
 
+## Draws all background styleboxes.
 func _draw_grid() -> void:
 	var inv_size := Vector2(_inventory.size);
 	var render_data := _get_render_data();
@@ -70,6 +90,7 @@ func _draw_grid() -> void:
 					)
 			);
 
+## Draws all item icons.
 func _draw_items() -> void:
 	var render_data: RenderData = _get_render_data();
 	
@@ -90,8 +111,12 @@ func _draw_items() -> void:
 		);
 	
 	draw_set_transform(Vector2.ZERO);
-	
+
+## Draws the item count text for all items with a stack size greater than 1.
+func _draw_item_numbers():
 	const MARGIN = Vector2(-8, -8);
+	
+	var render_data: RenderData = _get_render_data();
 	
 	var font: Font = get_theme_default_font();
 	var font_size: int = get_theme_default_font_size();
@@ -134,7 +159,7 @@ func _get_drag_data(at_position: Vector2) -> Variant:
 		return null;
 	
 	var render_data: RenderData = _get_render_data();
-	var tile_pos := Vector2i((at_position - render_data.offset) / render_data.item_edge);
+	var tile_pos: Vector2i = render_data.get_tile_pos(at_position);
 	var items: Dictionary = _inventory.get_all_items_by_position();
 	var item_at_pos: InventoryItemStack = items.get(tile_pos);
 	
@@ -159,14 +184,7 @@ func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
 		return false;
 	
 	var render_data: RenderData = _get_render_data();
-	
-	if at_position.x < render_data.offset.x or at_position.y < render_data.offset.y:
-		return false;
-	
-	if at_position.x > size.x - render_data.offset.x or at_position.y > size.y - render_data.offset.y:
-		return false;
-	
-	var tile_pos := Vector2i((at_position - render_data.offset) / render_data.item_edge);
+	var tile_pos: Vector2i = render_data.get_tile_pos(at_position);
 	
 	return _inventory.can_fit_item(tile_pos, data.get_rotated_size(), data.stack);
 
@@ -176,9 +194,15 @@ func _drop_data(at_position: Vector2, data: Variant) -> void:
 	data.source_inventory.take_item_stack(data.stack);
 	
 	var render_data: RenderData = _get_render_data();
-	var tile_pos := Vector2i((at_position - render_data.offset) / render_data.item_edge);
+	var tile_pos: Vector2i = render_data.get_tile_pos(at_position);
 	
-	_inventory.add_item_at_position(data.stack.data, data.stack.count, tile_pos, data.rotated, data.stack.instance_data);
+	_inventory.add_item_at_position(
+			data.stack.data, 
+			data.stack.count, 
+			tile_pos, 
+			data.is_rotated(), 
+			data.stack.instance_data
+	);
 	
 	queue_redraw();
 
@@ -192,7 +216,7 @@ func _gui_input(ev: InputEvent) -> void:
 	var drag_data = get_viewport().gui_get_drag_data();
 	
 	var render_data: RenderData = _get_render_data();
-	var tile_pos := Vector2i((ev.position - render_data.offset) / render_data.item_edge);
+	var tile_pos: Vector2i = render_data.get_tile_pos(ev.position);
 	
 	if tile_pos.x < 0 or tile_pos.y < 0:
 		_hover.clear();
@@ -381,9 +405,17 @@ func _get_render_data() -> RenderData:
 	var inv_size := Vector2(_inventory.size);
 	var tile_size: Vector2 = size / inv_size;
 	var rect_edge: float = min(tile_size.x, tile_size.y);
-	var offset: Vector2 = (size - inv_size * rect_edge) / 2;
+	var offset: Vector2 = (size - inv_size * rect_edge);
 	
-	return RenderData.new(offset, rect_edge);
+	match _grid_alignment:
+		Align.TOP_LEFT:
+			return RenderData.new(Vector2.ZERO, rect_edge);
+		Align.CENTERED:
+			return RenderData.new(offset / 2, rect_edge);
+		Align.BOTTOM_RIGHT:
+			return RenderData.new(offset, rect_edge);
+	
+	return null;
 
 class RenderData extends RefCounted:
 	var offset: Vector2;
@@ -393,3 +425,6 @@ class RenderData extends RefCounted:
 	func _init(offset: Vector2, item_edge: float) -> void:
 		self.offset = offset;
 		self.item_edge = item_edge;
+	
+	func get_tile_pos(local_position: Vector2) -> Vector2i:
+		return Vector2i((local_position - offset) / item_edge);

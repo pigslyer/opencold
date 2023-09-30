@@ -1,23 +1,33 @@
 class_name Inventory
 extends RefCounted
+## Represents the low level data portion of a single grid based inventory.
 
+
+## Emitted when any item was added or removed from this inventory.
 signal inventory_changed();
 
+## The size of this inventory in grid cells.
 var size: Vector2i;
 
 ## Maps Vector2i to InventoryItemStack at that position
 var _positionCache: Dictionary;
+
+## Contains all items contained in this inventory.
 var _items: Array[InventoryItemStack];
 
 @warning_ignore("shadowed_variable")
 func _init(size: Vector2i) -> void:
 	self.size = size;
 
-
+## Returns an array of all items in this inventory.[br]
+## Duplicate before attempting to modify contents!
 func get_all_items() -> Array[InventoryItemStack]:
 	return _items;
 
-
+## Returns a mapping of Vector2i's to InventoryItemStacks.[br]
+## This dictionary maps position to the items at those positions. Position with no
+## item on them are not present in the dictionary.[br]
+## Duplicate before attempting to modify contents!
 func get_all_items_by_position() -> Dictionary:
 	return _positionCache;
 
@@ -53,6 +63,7 @@ func add_item(item_data: InventoryItem, count: int) -> int:
 					return 0;
 	
 	var rotated := Vector2i(item_data.size.y, item_data.size.x);
+	
 	for y in range(0, size.y - rotated.y + 1):
 		for x in range(0, size.x - rotated.x + 1):
 			if can_fit_item(Vector2i(x, y), rotated, null):
@@ -70,6 +81,9 @@ func add_item(item_data: InventoryItem, count: int) -> int:
 	
 	return count;
 
+## Attempts to add item to given position. 
+## Should only be used on areas that have been checked to be clear via
+## can_fit_item.
 func add_item_at_position(item_data: InventoryItem, count: int, pos: Vector2i, rotated: bool, instance_data: Dictionary = {}) -> void:
 	var new_item := InventoryItemStack.new(
 			item_data,
@@ -100,6 +114,8 @@ func get_item_count(id: String) -> int:
 	
 	return count;
 
+## Removes givne item stack from the inventory. Should NOT be used on item stacks not present
+## in inventory.
 func take_item_stack(stack: InventoryItemStack) -> void:
 	var idx: int = _items.find(stack);
 	assert(idx != -1, "Item stack not present in this inventory!");
@@ -113,14 +129,23 @@ func take_item_stack(stack: InventoryItemStack) -> void:
 	
 	inventory_changed.emit();
 
+
+## Removes given number of items from inventory, starting from the smallest stacks.
+## If multiple stacks contain the same number of items
 func take_item_count(id: String, count: int) -> bool:
 	if get_item_count(id) < count:
 		return false;
 	
 	var starting_count: int = count;
 	
-	var sort_func = func(a: InventoryItemStack, b: InventoryItemStack):
-		return a.count < b.count;
+	var sort_func = func(a: InventoryItemStack, b: InventoryItemStack) -> bool:
+		if a.count != b.count:
+			return a.count < b.count;
+		
+		if a.position.y != b.position.y:
+			return a.position.y < b.position.y;
+		
+		return a.position.x < b.position.x;
 	
 	var items: Array[InventoryItemStack] = _find_stacks_by_id(id);
 	items.sort_custom(sort_func);
@@ -131,6 +156,7 @@ func take_item_count(id: String, count: int) -> bool:
 			take_item_stack(item);
 		else:
 			item.count -= count;
+			count = 0;
 			break;
 	
 	if starting_count != count:
@@ -138,7 +164,9 @@ func take_item_count(id: String, count: int) -> bool:
 	
 	return true;
 
-
+## Checks whether item of given size could fit at given position.[br]
+## ignoring_item can be used to ignore given single item from check.
+## This is useful for drag and drop tests, where you want to ignore the dragged item.
 func can_fit_item(item_pos: Vector2i, item_size: Vector2i, ignoring_item: InventoryItemStack = null) -> bool:
 	if item_pos.x < 0 or item_pos.y < 0:
 		return false;
@@ -155,6 +183,7 @@ func can_fit_item(item_pos: Vector2i, item_size: Vector2i, ignoring_item: Invent
 	
 	return true;
 
+## Returns all inventory stacks with given id in a single array.
 func _find_stacks_by_id(id: String) -> Array[InventoryItemStack]:
 	var ret: Array[InventoryItemStack] = [];
 	

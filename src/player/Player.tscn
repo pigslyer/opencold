@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://src/player/Player.gd" id="1_gnilo"]
 [ext_resource type="PackedScene" uid="uid://btdtc2o2jdoxs" path="res://src/models/humanoid/HumanoidModel.tscn" id="2_pw0av"]
-[ext_resource type="PackedScene" uid="uid://bg8chpmr5x6me" path="res://src/player/PlayerInventory.tscn" id="3_ulwse"]
+[ext_resource type="PackedScene" uid="uid://bg8chpmr5x6me" path="res://src/player/PlayerEquipment.tscn" id="3_ulwse"]
 
 [sub_resource type="Curve" id="Curve_lcvly"]
 min_value = 250.0
@@ -40,4 +40,4 @@ shape = SubResource("CapsuleShape2D_6ijbq")
 [node name="PlayerEquipment" parent="CanvasLayer" instance=ExtResource("3_ulwse")]
 visible = false
 
-[connection signal="on_item_equipped" from="CanvasLayer/PlayerEquipment" to="." method="_on_player_inventory_on_item_equipped"]
+[connection signal="on_item_equipped" from="CanvasLayer/PlayerEquipment" to="." method="_on_player_equipment_on_item_equipped"]

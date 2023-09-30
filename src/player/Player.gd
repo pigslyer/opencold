@@ -30,7 +30,11 @@ var max_health: float = 100.0
 ## The Player's current health
 var health: float = max_health
 
-var _equipped_item: InventoryItemStack;
+## The Player's currently equipped item, or null if none is equipped.
+var _equipped_item: InventoryItemStack = null;
+
+## An instance of the currently equipped item's behaviour, or null if current item
+## hasn't got a behaviour.
 var _equipped_item_behaviour: InventoryItemBehaviour = null;
 
 func _physics_process(delta: float) -> void:
@@ -61,8 +65,11 @@ func _physics_process(delta: float) -> void:
 	
 	if _equipped_item_behaviour != null:
 		_equipped_item_behaviour.update(_generate_item_usage_data());
+		
+		# idiotproofing
+		assert(_equipped_item.data.stack_size > 1 or _equipped_item.instance_data.size() == 0, "Item %s with a stack count greater than 1 has attepmted to write to its instance data!" % _equipped_item.data.id)
 	
-	# remove and replace with item behaviour usage
+	# TODO: remove and replace with item behaviour usage
 	if Input.is_action_just_pressed("use_held"):
 		fire_weapon()
 	
@@ -88,8 +95,8 @@ func fire_weapon() -> void: # TODO: Implement actual weapons, this is just magic
 		ray_end += position
 	
 	BulletTrace.make(position, ray_end) 
-
-func _process(delta: float) -> void:
+	
+	
 	if heat <= 24.0:
 		#Fucking die instantly
 		kill()
@@ -112,8 +119,9 @@ func damage(data: DamageData) -> void:
 func kill() -> void:
 	print("Man, I'm dead. (SkullEmoji)")
 
-
-func _on_player_inventory_on_item_equipped(item: InventoryItemStack) -> void:
+## Equips given item. Requests for the player to equip things should come from
+## the player's inventory, not be directed to the player.
+func _on_player_equipment_on_item_equipped(item: InventoryItemStack) -> void:
 	if _equipped_item == item:
 		return;
 	
@@ -130,10 +138,9 @@ func _on_player_inventory_on_item_equipped(item: InventoryItemStack) -> void:
 	_equipped_item_behaviour = _equipped_item.data.get_behaviour_instance();
 	
 	if _equipped_item_behaviour != null:
+		# maybe reuse this first generated instance for as long as item is equipped?
 		_equipped_item_behaviour.equip(_generate_item_usage_data());
 
+
 func _generate_item_usage_data() -> InventoryUsageData:
-	if _equipped_item.data.stack_size == 1:
-		return InventoryUsageData.new(self, _equipped_item.instance_data);
-	else:
-		return InventoryUsageData.new(self, {});
+	return InventoryUsageData.new(self, _equipped_item.instance_data);

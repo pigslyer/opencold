@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="InventoryItem" load_steps=4 format=3 uid="uid://bdtgf6git81cd"]
 
 [ext_resource type="Texture2D" uid="uid://cefay3p87ij2q" path="res://src/assets/icon.svg" id="1_yl8xl"]
-[ext_resource type="Script" path="res://src/inventory/InventoryItem.gd" id="1_yxjxa"]
-[ext_resource type="Script" path="res://src/inventory/items/asd.gd" id="2_dk6me"]
+[ext_resource type="Script" path="res://src/inventory/internal/InventoryItem.gd" id="1_yxjxa"]
+[ext_resource type="Script" path="res://src/inventory/behaviours/CounterBehaviour.gd" id="2_dk6me"]
 
 [resource]
 script = ExtResource("1_yxjxa")

@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://bg8chpmr5x6me"]
 
-[ext_resource type="Script" path="res://src/player/Inventory.gd" id="1_byjtu"]
-[ext_resource type="Script" path="res://src/inventory/InventoryRenderer.gd" id="1_qdt61"]
+[ext_resource type="Script" path="res://src/player/PlayerEquipment.gd" id="1_byjtu"]
+[ext_resource type="Script" path="res://src/inventory/internal/InventoryRenderer.gd" id="2_76qp2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g8rgh"]
 bg_color = Color(0.678431, 0.678431, 0.678431, 1)
@@ -33,7 +33,7 @@ InventoryRenderer/styles/cell_empty = SubResource("StyleBoxFlat_g8rgh")
 InventoryRenderer/styles/cell_filled = SubResource("StyleBoxFlat_7nof0")
 TextEdit/colors/font_readonly_color = Color(0.85098, 0.85098, 0.85098, 1)
 
-[node name="PlayerInventory" type="TabContainer"]
+[node name="PlayerEquipment" type="TabContainer"]
 anchors_preset = -1
 anchor_left = 0.1
 anchor_top = 0.1
@@ -61,7 +61,8 @@ size_flags_vertical = 3
 [node name="Inventory" type="ReferenceRect" parent="Inventory/VBox/HBox"]
 layout_mode = 2
 size_flags_horizontal = 3
-script = ExtResource("1_qdt61")
+script = ExtResource("2_76qp2")
+_grid_alignment = 0
 
 [node name="ItemDescription" type="TextEdit" parent="Inventory/VBox/HBox"]
 layout_mode = 2
