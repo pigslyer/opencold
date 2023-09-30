@@ -55,7 +55,7 @@ func _physics_process(delta: float) -> void:
 				if result and result.collider == body:
 					target = body
 					navigation_agent.target_position = target.position
-					alert_level += 0.1
+					alert_level += delta
 					return
 	else:
 		if aggro_area.get_overlapping_bodies().has(target):
@@ -73,7 +73,7 @@ func _physics_process(delta: float) -> void:
 				current_attack_delay = attack_delay
 		
 		if navigation_agent.is_navigation_finished():
-			velocity *= 0.5
+			velocity *= delta * 3.0
 		else:
 			var direction : Vector2 = global_position.direction_to(navigation_agent.get_next_path_position())
 			velocity += ((direction * movement_speed) - velocity) * delta
