@@ -67,7 +67,7 @@ func _physics_process(delta: float) -> void:
 		_equipped_item_behaviour.update(_generate_item_usage_data());
 		
 		# idiotproofing
-		assert(_equipped_item.data.stack_size > 1 or _equipped_item.instance_data.size() == 0, "Item %s with a stack count greater than 1 has attepmted to write to its instance data!" % _equipped_item.data.id)
+		assert(not(_equipped_item.data.stack_size > 1 and _equipped_item.instance_data.size() > 0), "Item %s with a stack count greater than 1 has attepmted to write to its instance data!" % _equipped_item.data.id)
 	
 	# TODO: remove and replace with item behaviour usage
 	if Input.is_action_just_pressed("use_held"):
