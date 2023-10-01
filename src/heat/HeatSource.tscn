@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bolv01g5t2o2w"]
+
+[ext_resource type="Script" path="res://src/heat/HeatSource.gd" id="1_wwcxs"]
+
+[node name="HeatSource" type="Area2D"]
+collision_layer = 16
+collision_mask = 22
+script = ExtResource("1_wwcxs")
