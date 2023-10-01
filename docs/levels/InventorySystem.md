@@ -4,7 +4,7 @@ When it comes to using the inventory system, one needs to be aware of 3 differen
 
 ## Inventory
 
-The inventory classes provides low level access to inventory data itself, however it can be queried for item counts and instructed to add items.
+The inventory classes provides low level access to inventory data itself. It can be queried for item counts and instructed to add or remove items.
 
 ## InventoryItem
 
@@ -12,11 +12,11 @@ This Resource represents the unique data that all inventory items should share -
 
 InventoryItems contain an id field, and this is the only thing that needs to be unique in order for an item to be considered unique. This allows them to work without forcing all of them to be file system resources.
 
-When creating new items for level design purposes, a decision has to be made as to whether or not the item should be stored in the filesystem as a resource or inlined into the level data. Generally, if something will only need to be spawned in that one specific container and we need never give it an overview (for example, a unique puzzle item would fit in this category), then inlining should be used. Otherwise, I recommend creating a a Resource, as this will let us reuse it, or just know where it is.
+When creating new items for level design purposes, a decision has to be made as to whether or not the item should be stored in the filesystem as a resource or inlined into the level data. Generally, if something will only need to be spawned in that one specific container and we need never give it an overview (for example, a unique puzzle item would fit in this category), then inlining should be used. Otherwise, I recommend creating a Resource, as this will let us reuse it, or just know where it is.
 
 ## InventoryItemBehaviour
 
-This script represents a base type which should be used for scripting unique item behaviour. It contains a set of pure virtual functions with 1 parameter, a data class which allows for mutating the state of the player or item. This can currently only be used for equipping items, but we will expand it also handle at least item usage.
+This script represents a base type which should be used for scripting unique item behaviour. It contains a set of pure virtual functions with 1 parameter, a data class which allows for mutating the state of the player or item. This can currently only be used for equipping items, but we will expand it also handle at least item usage without a manual equip.
 
 Note: This script should **NOT** contain any fields. The inventory makes no guarantee as to when a behaviour is instantiated or freed. Instance specific data should be stored in the data parameter's instance_data field.
 
