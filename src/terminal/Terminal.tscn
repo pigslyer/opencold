@@ -1,0 +1,149 @@
+[gd_scene load_steps=12 format=3 uid="uid://dvhwwdfik4ixu"]
+
+[ext_resource type="FontFile" uid="uid://26ni8u12uhow" path="res://src/terminal/consola.ttf" id="1_n5vio"]
+[ext_resource type="Script" path="res://src/terminal/Terminal.gd" id="2_ldpsu"]
+[ext_resource type="Script" path="res://src/terminal/TerminalWindows/MenuTerminalWindow/MenuTerminalWindow.gd" id="3_1gqi7"]
+[ext_resource type="Script" path="res://src/terminal/TerminalWindows/ScrollTerminalWindow/ScrollTerminalWindow.gd" id="4_2745t"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2pxu1"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_en0u0"]
+bg_color = Color(0.32549, 0.619608, 0.2, 1)
+
+[sub_resource type="Theme" id="Theme_ksm8f"]
+default_font = ExtResource("1_n5vio")
+default_font_size = 20
+/font_sizes/jhf = 16
+Button/colors/font_color = Color(0.258824, 0.827451, 0, 1)
+Button/colors/font_disabled_color = Color(0.670588, 0.721569, 0.662745, 1)
+Button/colors/icon_disabled_color = Color(0.34902, 0.568627, 0.372549, 1)
+Button/styles/disabled = SubResource("StyleBoxFlat_2pxu1")
+Button/styles/focus = SubResource("StyleBoxFlat_en0u0")
+Button/styles/hover = SubResource("StyleBoxFlat_en0u0")
+Button/styles/normal = SubResource("StyleBoxFlat_2pxu1")
+Button/styles/pressed = SubResource("StyleBoxFlat_en0u0")
+Label/colors/font_color = Color(0.231373, 0.615686, 0.054902, 1)
+Label/colors/font_outline_color = Color(0.231373, 0.615686, 0.054902, 0.490196)
+Label/constants/outline_size = 2
+
+[sub_resource type="Resource" id="Resource_ajlq2"]
+script = ExtResource("3_1gqi7")
+text = "Important lore about spiders."
+menus = Array[Resource("res://src/terminal/TerminalWindows/BaseTerminalWindow.gd")]([])
+has_back = true
+has_exit = false
+button_text = "Plot here!"
+
+[sub_resource type="Resource" id="Resource_5jrif"]
+script = ExtResource("3_1gqi7")
+text = "Rem at minima ex ullam nostrum voluptas. Et tempore est et. Dolorem ea maxime consequatur distinctio facilis. Occaecati voluptas veniam dicta. Dolor enim minus sint temporibus et culpa similique qui.
+
+Autem eveniet placeat necessitatibus adipisci sed repellat quaerat. Maxime eum maiores saepe tempora. Vitae rerum dolorum est debitis est. Ratione eius dolorem sed ad quasi maxime consectetur et. Omnis inventore eos quia explicabo.
+
+Sint dolores cupiditate praesentium enim neque et. Cum cupiditate necessitatibus esse veritatis omnis ex. Dolores maxime laudantium atque qui similique esse voluptate adipisci. Ut alias minima dolor nemo ullam.
+
+Eum earum non ratione et rerum. Accusantium nisi voluptas vel et aliquam. Molestiae nemo labore dicta perferendis pariatur maiores.
+
+Ipsa nihil odit distinctio. Aut reprehenderit aut voluptatem facere ex vitae. Repellat iste quibusdam illum autem omnis vel. Perferendis enim provident veritatis recusandae. Ipsum mollitia quo accusantium."
+menus = Array[Resource("res://src/terminal/TerminalWindows/BaseTerminalWindow.gd")]([])
+has_back = true
+has_exit = true
+button_text = "Lorem Ipsum"
+
+[sub_resource type="Resource" id="Resource_h0vu4"]
+script = ExtResource("4_2745t")
+text = "Ut repellendus delectus suscipit sint sed odit mollitia sed. Quo qui voluptatibus quam sed laudantium magni fuga. Odio hic est deserunt voluptatem. Earum et ducimus aut et quis. Molestias id ut impedit itaque sint totam tenetur. Harum qui necessitatibus voluptatem autem enim amet sint.
+
+Hic illo qui adipisci. Praesentium iure neque consequuntur voluptatibus vero nam similique. Neque eligendi consequatur voluptatem maiores accusantium.
+
+Cupiditate veritatis dolore odit neque sit soluta molestiae dolores. Sed libero blanditiis dicta. Voluptas amet magni omnis vel illum sunt voluptatem. Distinctio error nesciunt qui at est nemo. Qui consequuntur illo quo doloremque quae porro.
+
+Omnis ex vel eligendi amet vel eum. Officiis necessitatibus qui vel iusto et. Qui quia eligendi sint. Pariatur aliquid quia incidunt.
+
+Commodi aut velit error dolor expedita sit officia. Voluptatem itaque dolorem suscipit. Et aspernatur est et velit illo ipsam mollitia. Incidunt pariatur voluptas veritatis cupiditate. Placeat minus reiciendis voluptatibus. Aliquid iusto rerum consequatur culpa explicabo provident quia vero.
+
+Quos omnis modi sed veniam tempore. Quibusdam qui numquam magni ut nostrum. Libero possimus omnis deserunt ipsum dolores repellendus non harum. Amet eius quis et ut. Odit ducimus temporibus illo doloribus voluptate.
+
+Aliquam et inventore fuga consequatur culpa. Dolor natus magni consectetur. Voluptatem qui commodi sed aperiam qui.
+
+Sunt quidem necessitatibus quibusdam est provident odio et perferendis. Voluptas sit consequatur qui non quia ex. In doloribus a saepe. Optio facere voluptate repellendus voluptatem sunt. Culpa vel suscipit recusandae expedita voluptate.
+
+Officiis omnis omnis deserunt deleniti ea optio. Omnis veritatis qui voluptatem pariatur est. Sunt dolorem nesciunt voluptatibus rerum incidunt doloribus aut.
+
+Consequuntur neque magni necessitatibus. Molestias culpa magnam ea dolores velit. At voluptatum et rerum sequi. Enim suscipit architecto perspiciatis repellendus non omnis ut nemo. Ut quidem assumenda saepe dolores odit. Recusandae pariatur quae ut quia dolorum.
+
+Autem dolore perferendis tempore sequi voluptas velit magnam. Repellat maiores fugit et et veritatis provident. Asperiores aut mollitia itaque ea molestias. Est aliquam est eius harum qui aliquam laborum.
+
+Dolorum reprehenderit atque alias rerum itaque sunt quis. Itaque quia necessitatibus sit tenetur occaecati sit et. Magni fugit non ducimus perferendis quis nostrum distinctio.
+
+Dolores inventore voluptatem ut. Quia aspernatur veritatis totam et qui. Autem debitis quos error. A iusto deserunt libero quia magni porro cum. Numquam fuga et in tempore.
+
+Architecto et autem iusto quia harum quam. Ut praesentium et numquam beatae saepe. Reprehenderit aperiam aut assumenda et nihil. Reiciendis itaque fugit omnis est quia.
+
+In accusantium dolor recusandae est sit error qui. Quibusdam dignissimos tempora et iste ut quo. Nihil veniam nobis tenetur voluptas quis possimus nemo quia. Voluptas sit est error quis sed et. In nesciunt et sit vero distinctio quam doloribus. Officiis maxime rerum repellendus est sint modi.
+
+Nobis suscipit officia sequi cumque. Et fugit nihil nam debitis suscipit. Autem aut praesentium aut. Et commodi quis quisquam facilis sed dignissimos aspernatur. Omnis provident laborum neque aut. Sapiente qui error officiis quae qui.
+
+Est et sed id ut enim consequatur eum. Voluptate minima vel tempora qui et autem et. Quia tempora quibusdam soluta. Nesciunt harum quia sunt soluta temporibus accusantium.
+
+Dolores et id vel neque et quia. Et voluptatibus odit deserunt libero. Doloremque delectus eum sit harum qui nesciunt excepturi. Aut sint consectetur neque qui porro neque ut est. Esse aut quis dolorum.
+
+Cum veniam cum sapiente. Eum consequatur neque sed. Ea consequuntur sit ut voluptas.
+
+Commodi sed et aliquid maxime quae molestiae. Adipisci ratione doloremque repellat totam. Quidem dolor autem commodi iste aut aut.
+"
+has_back = true
+has_exit = false
+button_text = "BIG lorem ipsum"
+
+[sub_resource type="Resource" id="Resource_s6362"]
+script = ExtResource("3_1gqi7")
+text = "I AM TESTING TEST TESST TEST"
+menus = Array[Resource("res://src/terminal/TerminalWindows/BaseTerminalWindow.gd")]([SubResource("Resource_ajlq2"), SubResource("Resource_5jrif"), SubResource("Resource_h0vu4")])
+has_back = false
+has_exit = true
+button_text = ""
+
+[node name="Terminal" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_ksm8f")
+script = ExtResource("2_ldpsu")
+start_window = SubResource("Resource_s6362")
+metadata/_edit_use_anchors_ = true
+
+[node name="Screen" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -475.0
+offset_top = -325.0
+offset_right = 475.0
+offset_bottom = 325.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="ContentContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -450.0
+offset_top = -300.0
+offset_right = 450.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2

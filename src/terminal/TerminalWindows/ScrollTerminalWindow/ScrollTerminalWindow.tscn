@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://c6sb4sf3jaupg"]
+
+[node name="ScrollTerminalWindow" type="VBoxContainer"]
+custom_minimum_size = Vector2(0, 26)
+offset_left = -450.0
+offset_top = -15.5
+offset_right = 450.0
+offset_bottom = 15.5
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="ScrollContainer"]
+custom_minimum_size = Vector2(900, 26)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "PLACEHOLDER"
+autowrap_mode = 3

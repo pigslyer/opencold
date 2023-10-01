@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ButtonTerminalWindow" load_steps=2 format=3 uid="uid://dvfg301kc3ird"]
+
+[sub_resource type="GDScript" id="GDScript_ct8f6"]
+script/source = "class_name ButtonTerminalWindow
+extends BaseTerminalWindow;
+
+
+@export var leads_to_terminal_windows : Resource;
+@export var button_text : String;
+"
+
+[resource]
+script = SubResource("GDScript_ct8f6")
+button_text = null

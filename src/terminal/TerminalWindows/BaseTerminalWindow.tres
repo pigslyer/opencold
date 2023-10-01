@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="BaseTerminalWindow" load_steps=2 format=3 uid="uid://hohhunxllp3g"]
+
+[ext_resource type="Script" path="res://src/terminal/TerminalWindows/BaseTerminalWindow.gd" id="1_7omsj"]
+
+[resource]
+script = ExtResource("1_7omsj")

@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://cnwwvmbrbisjt"]
+
+[ext_resource type="PackedScene" uid="uid://dvhwwdfik4ixu" path="res://src/terminal/Terminal.tscn" id="1_506tv"]
+[ext_resource type="Script" path="res://src/terminal/TerminalWindows/MenuTerminalWindow/MenuTerminalWindow.gd" id="3_4t065"]
+
+[sub_resource type="Resource" id="Resource_ah7ss"]
+script = ExtResource("3_4t065")
+has_back = false
+has_exit = true
+menus = Array[Resource("res://src/terminal/TerminalWindows/BaseTerminalWindow.gd")]([])
+text = "This is a lot of text."
+title = ""
+
+[node name="TerminalTest" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Terminal" parent="." instance=ExtResource("1_506tv")]
+layout_mode = 1
+windows = Array[Resource("res://src/terminal/TerminalWindows/BaseTerminalWindow.gd")]([SubResource("Resource_ah7ss")])

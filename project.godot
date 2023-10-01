@@ -25,6 +25,10 @@ window/size/viewport_height=720
 window/stretch/mode="viewport"
 window/stretch/aspect="ignore"
 
+[dotnet]
+
+project/assembly_name="Opencold"
+
 [input]
 
 mv_up={
