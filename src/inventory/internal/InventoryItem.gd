@@ -1,6 +1,5 @@
 @tool
 
-@icon("res://src/assets/icon_item.svg")
 class_name InventoryItem
 extends Resource
 ## Represents serialized item data.
