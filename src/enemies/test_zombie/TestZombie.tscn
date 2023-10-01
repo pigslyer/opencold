@@ -1,0 +1,37 @@
+[gd_scene load_steps=4 format=3 uid="uid://u1hv1klfcmi3"]
+
+[ext_resource type="Script" path="res://src/enemies/test_zombie/TestZombie.gd" id="1_j7ulc"]
+[ext_resource type="PackedScene" uid="uid://btdtc2o2jdoxs" path="res://src/models/humanoid/HumanoidModel.tscn" id="1_xspq4"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_guf1t"]
+radius = 40.0
+height = 186.0
+
+[node name="TestZombie" type="CharacterBody2D"]
+collision_layer = 5
+collision_mask = 7
+motion_mode = 1
+wall_min_slide_angle = 0.0
+script = ExtResource("1_j7ulc")
+
+[node name="AggroArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 6
+
+[node name="Sight" type="CollisionPolygon2D" parent="AggroArea"]
+polygon = PackedVector2Array(0, 0, 500, -250, 750, -250, 750, 250, 500, 250)
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+target_position = Vector2(1000, 0)
+collision_mask = 7
+
+[node name="HumanoidModel" parent="." instance=ExtResource("1_xspq4")]
+modulate = Color(1, 0.498039, 0.0823529, 1)
+
+[node name="BodyShape" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_guf1t")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_desired_distance = 125.0
+target_desired_distance = 125.0
+avoidance_enabled = true
