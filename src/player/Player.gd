@@ -30,7 +30,7 @@ var health: float = max_health
 
 func _physics_process(delta: float) -> void:
 	var mouse_position: Vector2 = get_local_mouse_position();
-	camera.position.x = 0.3 * mouse_position.length();
+	camera.position.x = 0.3 * min(mouse_position.length(), 1000.0);
 	var facing_angle: float = mouse_position.angle();
 	human_model.set_facing_target_angle(facing_angle);
 	
@@ -70,14 +70,14 @@ func fire_weapon() -> void: # TODO: Implement actual weapons, this is just magic
 	if result:
 		ray_end = result.position
 		
-		if result.collider.has_method("damage"):
-			result.collider.damage(DamageData.new(10.0, self)) # Temp magic number ( damage of the weapon used )
+		if result.collider.has_method("take_damage"):
+			result.collider.take_damage(DamageData.new(10.0, self)) # Temp magic number ( damage of the weapon used )
 	else:
 		ray_end += position
 	
 	BulletTrace.make(position, ray_end) 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if heat <= 24.0:
 		#Fucking die instantly
 		kill()
@@ -91,7 +91,7 @@ func alter_heat(heat_data: HeatData) -> void:
 	heat += heat_diff * heat_data.heat_rate
 
 ## Function that takes in [DamageData] to calculate how much damage the [Player] takes.
-func damage(data: DamageData) -> void:
+func take_damage(data: DamageData) -> void:
 	health -= data.damage
 	if health <= 0.0:
 		kill()

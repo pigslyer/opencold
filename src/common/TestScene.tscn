@@ -1,0 +1,128 @@
+[gd_scene load_steps=15 format=3 uid="uid://chccliodhyfh3"]
+
+[ext_resource type="PackedScene" uid="uid://bv8hayx4en8oc" path="res://src/player/Player.tscn" id="1_0rqhy"]
+[ext_resource type="Texture2D" uid="uid://cefay3p87ij2q" path="res://src/assets/icon.svg" id="2_736r7"]
+[ext_resource type="PackedScene" uid="uid://u1hv1klfcmi3" path="res://src/enemies/test_zombie/TestZombie.tscn" id="3_5ctv8"]
+[ext_resource type="PackedScene" uid="uid://r4ss16lhnt4w" path="res://src/enemies/test_human/TestHuman.tscn" id="4_68ast"]
+[ext_resource type="PackedScene" uid="uid://bolv01g5t2o2w" path="res://src/heat/HeatSource.tscn" id="5_brael"]
+[ext_resource type="Texture2D" uid="uid://bdigc81bpf034" path="res://src/assets/noexport/flame.svg" id="6_bomcb"]
+[ext_resource type="Script" path="res://src/heat/AmbientHeat.gd" id="7_jrmv0"]
+
+[sub_resource type="GDScript" id="GDScript_xng6h"]
+script/source = "extends StaticBody2D
+
+## Function that takes in [DamageData] to calculate how much damage the [Player] takes.
+func damage(_data: DamageData) -> void:
+	print(\"OUCH!!!\")
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2pqit"]
+size = Vector2(319, 237.5)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_oy0qs"]
+radius = 163.47
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_iwqo7"]
+vertices = PackedVector2Array(333, 372, 653, 442, 304, 948)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(304, 948, 653, 442, 333, 372)])
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_kas31"]
+vertices = PackedVector2Array(1352, 913, 322, 944, 713, 376, 1566, -871, 677, -9, 634, -311, 350, 369, 321, 942, -891, 806, -879, -805, 321, -15, 373, -306, 485, -374)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2), PackedInt32Array(3, 0, 2, 4), PackedInt32Array(3, 4, 5), PackedInt32Array(6, 7, 8, 9, 10), PackedInt32Array(11, 10, 9), PackedInt32Array(3, 5, 12), PackedInt32Array(9, 3, 12), PackedInt32Array(9, 12, 11)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(1566, -871, -879, -805, -891, 806, 321, 942, 350, 369, 321, -15, 373, -306, 485, -374, 634, -311, 677, -9, 713, 376, 322, 944, 1352, 913)])
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_l6mkm"]
+radius = 350.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nfmy1"]
+size = Vector2(2500, 1881)
+
+[node name="TestScene" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("1_0rqhy")]
+motion_mode = 1
+
+[node name="Wall" type="StaticBody2D" parent="."]
+position = Vector2(500, 200)
+script = SubResource("GDScript_xng6h")
+
+[node name="WallShape" type="CollisionShape2D" parent="Wall"]
+position = Vector2(12.5, 48.25)
+shape = SubResource("RectangleShape2D_2pqit")
+
+[node name="Sprite2D" type="Sprite2D" parent="Wall"]
+position = Vector2(11.0001, 48)
+scale = Vector2(2.48438, 1.82031)
+texture = ExtResource("2_736r7")
+
+[node name="Pillar" type="StaticBody2D" parent="."]
+position = Vector2(500, -200)
+collision_mask = 0
+script = SubResource("GDScript_xng6h")
+
+[node name="PillarShape" type="CollisionShape2D" parent="Pillar"]
+shape = SubResource("CircleShape2D_oy0qs")
+
+[node name="PillarTex" type="Sprite2D" parent="Pillar"]
+position = Vector2(-1.50001, -6.50001)
+rotation = 0.392699
+scale = Vector2(2, 2)
+texture = ExtResource("2_736r7")
+
+[node name="PillarTex2" type="Sprite2D" parent="Pillar"]
+position = Vector2(-1.50001, -6.50001)
+rotation = 1.1781
+scale = Vector2(2, 2)
+texture = ExtResource("2_736r7")
+
+[node name="PillarTex3" type="Sprite2D" parent="Pillar"]
+position = Vector2(-1.5, -6.5)
+rotation = 0.785398
+scale = Vector2(2, 2)
+texture = ExtResource("2_736r7")
+
+[node name="PillarTex4" type="Sprite2D" parent="Pillar"]
+position = Vector2(-1.5, -6.5)
+scale = Vector2(2, 2)
+texture = ExtResource("2_736r7")
+
+[node name="TestZombie" parent="." instance=ExtResource("3_5ctv8")]
+position = Vector2(780, 5)
+
+[node name="NavigationRegion2D2" type="NavigationRegion2D" parent="."]
+position = Vector2(17, -5)
+navigation_polygon = SubResource("NavigationPolygon_iwqo7")
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+position = Vector2(0, -1)
+navigation_polygon = SubResource("NavigationPolygon_kas31")
+
+[node name="TestHuman" parent="." instance=ExtResource("4_68ast")]
+position = Vector2(-836, 740)
+motion_mode = 1
+wall_min_slide_angle = 0.0
+
+[node name="HeatSource" parent="." instance=ExtResource("5_brael")]
+position = Vector2(500, 45.265)
+radius = 350.0
+target_heat = 37.0
+rate = 0.1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HeatSource"]
+shape = SubResource("CircleShape2D_l6mkm")
+
+[node name="Sprite2D" type="Sprite2D" parent="HeatSource"]
+scale = Vector2(0.22, 0.22)
+texture = ExtResource("6_bomcb")
+
+[node name="AmbientHeat" type="Area2D" parent="."]
+position = Vector2(-301, 0)
+collision_layer = 16
+collision_mask = 22
+script = ExtResource("7_jrmv0")
+target_heat = 16.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AmbientHeat"]
+position = Vector2(637, 30.5)
+shape = SubResource("RectangleShape2D_nfmy1")

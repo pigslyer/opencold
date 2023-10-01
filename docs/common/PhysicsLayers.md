@@ -19,3 +19,7 @@ Refers to things the player can interact with in the environment.
 
 ### Heat
 Refers to areas which are effected by a heat source.
+
+### Hole
+Refers to areas which aren't traversable, but are otherwise unobstructed.
+This means that you can see past them, and bullets can be shot past.
