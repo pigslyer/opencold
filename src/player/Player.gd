@@ -21,6 +21,7 @@ const RAY_ANGLE_OFFSET: float = 0.04
 @onready var camera: Camera2D = $HumanoidModel/Camera;
 
 @onready var player_equipment: Control = $CanvasLayer/PlayerEquipment;
+@onready var interact_area: InteractArea = $BodyShape/InteractArea
 
 ## The Player's body heat in Celsius
 var heat: float = 37.0
@@ -77,6 +78,13 @@ func _physics_process(delta: float) -> void:
 		player_equipment.visible = not player_equipment.visible;
 	
 	collision_shape.rotation = human_model.get_body_angle();
+	
+	if Input.is_action_just_pressed("interact") and interact_area.current_interactable != null:
+		interact_area.current_interactable.interact(self)
+	
+	if heat <= 24.0:
+		#Fucking die instantly
+		kill()
 
 func fire_weapon() -> void: # TODO: Implement actual weapons, this is just magic bullets currently.
 	var space_state = get_world_2d().direct_space_state
@@ -94,11 +102,7 @@ func fire_weapon() -> void: # TODO: Implement actual weapons, this is just magic
 	else:
 		ray_end += position
 	
-	BulletTrace.make(position, ray_end) 
-	
-	if heat <= 24.0:
-		#Fucking die instantly
-		kill()
+	BulletTrace.make(position, ray_end)
 
 ## Function that takes in [HeatData] to calculate changes to the [Player]'s internal temperature.
 func alter_heat(heat_data: HeatData) -> void:
