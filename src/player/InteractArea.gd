@@ -1,5 +1,5 @@
-extends Area2D
 class_name InteractArea
+extends Area2D
 
 ## Emitted when a new interactable object has been selected.
 signal on_interact_target_switch(old_interactable: Node2D, new_interactable: Node2D)
