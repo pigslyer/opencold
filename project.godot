@@ -18,6 +18,7 @@ config/icon="res://src/assets/icon.svg"
 [autoload]
 
 Global="*res://src/autoloads/Global.gd"
+EnemyUtil="*res://src/autoloads/EnemyUtil.gd"
 
 [display]
 
