@@ -42,7 +42,7 @@ size = Vector2(2500, 1881)
 script/source = "extends StaticBody2D
 
 func interact(char: CharacterBody2D):
-	print(\"CURRENTLY AGGOROD BY \", EnemyUtil.aggro_array.size(), \" ENEMIES!\")
+	print(\"CURRENTLY AGGOROD BY \", EnemyUtil.aggro_set.size(), \" ENEMIES!\")
 "
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l52cj"]
