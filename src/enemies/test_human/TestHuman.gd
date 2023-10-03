@@ -101,14 +101,13 @@ func aggro(tar: CharacterBody2D) -> void:
 	if tar != target:
 		target = tar
 		if target is Player:
-			EnemyUtil.aggro_array.append(self)
-		elif EnemyUtil.aggro_array.has(self):
-			EnemyUtil.aggro_array.erase(self)
+			EnemyUtil.begin_aggro(self)
+		else:
+			EnemyUtil.end_aggro(self)
 
 ## Function that handles what happens when death occurs.
 func kill() -> void:
-	if EnemyUtil.aggro_array.has(self):
-			EnemyUtil.aggro_array.erase(self)
+	EnemyUtil.end_aggro(self)
 	queue_free()
 
 ## TODO: Implement actual weapons, this is just magic bullets currently.
