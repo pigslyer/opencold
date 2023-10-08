@@ -1,0 +1,405 @@
+[gd_scene load_steps=33 format=3 uid="uid://gb5cqwb66yuu"]
+
+[ext_resource type="Script" path="res://src/player/HUD/HUD.gd" id="1_8do0f"]
+[ext_resource type="Texture2D" uid="uid://cefay3p87ij2q" path="res://src/assets/icon.svg" id="2_20nbn"]
+[ext_resource type="Texture2D" uid="uid://baa35cgdq6yte" path="res://src/assets/reactor.svg" id="3_tm04w"]
+[ext_resource type="Texture2D" uid="uid://ddxaaiak60x5e" path="res://src/assets/thermometer-cold.svg" id="4_10h4w"]
+[ext_resource type="Texture2D" uid="uid://cu38p3r3nmw5f" path="res://src/assets/health-normal.svg" id="5_5tkqi"]
+[ext_resource type="Texture2D" uid="uid://dj5do7gq6i80l" path="res://src/assets/flame.svg" id="6_7r46v"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4b86i"]
+content_margin_top = 8.0
+
+[sub_resource type="Gradient" id="Gradient_qm4dt"]
+offsets = PackedFloat32Array(0.00403226, 0.995968, 1)
+colors = PackedColorArray(0, 0, 1, 1, 0.931452, 1, 0.931452, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_nih7x"]
+gradient = SubResource("Gradient_qm4dt")
+
+[sub_resource type="Gradient" id="Gradient_jx3km"]
+colors = PackedColorArray(0, 0, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_351n7"]
+gradient = SubResource("Gradient_jx3km")
+
+[sub_resource type="Gradient" id="Gradient_urguo"]
+colors = PackedColorArray(0, 0, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_3u74t"]
+gradient = SubResource("Gradient_urguo")
+
+[sub_resource type="Gradient" id="Gradient_btnpq"]
+offsets = PackedFloat32Array(0.00403226, 0.995968, 1)
+colors = PackedColorArray(1, 0, 1, 1, 0.931452, 1, 0.931452, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_t1a72"]
+gradient = SubResource("Gradient_btnpq")
+
+[sub_resource type="Gradient" id="Gradient_0vc7g"]
+colors = PackedColorArray(1, 0, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_kpbe4"]
+gradient = SubResource("Gradient_0vc7g")
+
+[sub_resource type="Gradient" id="Gradient_pj75q"]
+colors = PackedColorArray(1, 0, 1, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_bb3c3"]
+gradient = SubResource("Gradient_pj75q")
+
+[sub_resource type="Gradient" id="Gradient_kw6sf"]
+offsets = PackedFloat32Array(0.00403226, 0.995968, 1)
+colors = PackedColorArray(0, 1, 0, 1, 0.931452, 1, 0.931452, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_x3yne"]
+gradient = SubResource("Gradient_kw6sf")
+
+[sub_resource type="Gradient" id="Gradient_qa10u"]
+colors = PackedColorArray(0, 1, 0, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_28e26"]
+gradient = SubResource("Gradient_qa10u")
+
+[sub_resource type="Gradient" id="Gradient_m84cf"]
+colors = PackedColorArray(0, 1, 0, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_qvehk"]
+gradient = SubResource("Gradient_m84cf")
+
+[sub_resource type="Gradient" id="Gradient_p710c"]
+offsets = PackedFloat32Array(0.00403226, 0.995968, 1)
+colors = PackedColorArray(1, 0, 0, 1, 0.931452, 1, 0.931452, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_jcxp8"]
+gradient = SubResource("Gradient_p710c")
+
+[sub_resource type="Gradient" id="Gradient_0wcag"]
+colors = PackedColorArray(1, 0, 0, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_fp4sb"]
+gradient = SubResource("Gradient_0wcag")
+
+[sub_resource type="Gradient" id="Gradient_qg41k"]
+colors = PackedColorArray(1, 0, 0, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_c6sph"]
+gradient = SubResource("Gradient_qg41k")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_01r66"]
+
+[node name="HUD" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+script = ExtResource("1_8do0f")
+
+[node name="Info" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Info"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.25
+anchor_bottom = 0.2
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Info/PanelContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Info/PanelContainer/MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 20
+
+[node name="InfoTexture" type="TextureRect" parent="Info/PanelContainer/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+texture = ExtResource("2_20nbn")
+
+[node name="InfoText" type="Label" parent="Info/PanelContainer/MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+size_flags_stretch_ratio = 1.4
+theme_override_styles/normal = SubResource("StyleBoxEmpty_4b86i")
+text = "This door is jammed!"
+autowrap_mode = 3
+
+[node name="EnvironmentInfo" type="Control" parent="."]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="PanelContainer3" type="PanelContainer" parent="EnvironmentInfo"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -368.0
+offset_bottom = 100.0
+grow_horizontal = 0
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="EnvironmentInfo/PanelContainer3"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="EnvironmentInfo/PanelContainer3/MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="ReactorPowerProgressBar" type="TextureProgressBar" parent="EnvironmentInfo/PanelContainer3/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+value = 50.0
+nine_patch_stretch = true
+texture_under = SubResource("GradientTexture1D_nih7x")
+texture_over = SubResource("GradientTexture1D_351n7")
+texture_progress = SubResource("GradientTexture1D_3u74t")
+
+[node name="TextureRect" type="TextureRect" parent="EnvironmentInfo/PanelContainer3/MarginContainer/VBoxContainer/ReactorPowerProgressBar"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.1
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("3_tm04w")
+expand_mode = 1
+
+[node name="EnvTemperatureProgressBar" type="TextureProgressBar" parent="EnvironmentInfo/PanelContainer3/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+min_value = -273.0
+max_value = 50.0
+nine_patch_stretch = true
+texture_under = SubResource("GradientTexture1D_t1a72")
+texture_over = SubResource("GradientTexture1D_kpbe4")
+texture_progress = SubResource("GradientTexture1D_bb3c3")
+
+[node name="TextureRect2" type="TextureRect" parent="EnvironmentInfo/PanelContainer3/MarginContainer/VBoxContainer/EnvTemperatureProgressBar"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.1
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("4_10h4w")
+expand_mode = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 8
+mouse_filter = 2
+
+[node name="PanelContainer2" type="PanelContainer" parent="HBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/PanelContainer2"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/PanelContainer2/MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="HealthProgressBar" type="TextureProgressBar" parent="HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+max_value = 1.0
+step = 0.01
+nine_patch_stretch = true
+texture_under = SubResource("GradientTexture1D_x3yne")
+texture_over = SubResource("GradientTexture1D_28e26")
+texture_progress = SubResource("GradientTexture1D_qvehk")
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/HealthProgressBar"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.1
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("5_5tkqi")
+expand_mode = 1
+
+[node name="PlayerHeatProgressBar" type="TextureProgressBar" parent="HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+value = 50.0
+nine_patch_stretch = true
+texture_under = SubResource("GradientTexture1D_jcxp8")
+texture_over = SubResource("GradientTexture1D_fp4sb")
+texture_progress = SubResource("GradientTexture1D_c6sph")
+
+[node name="TextureRect2" type="TextureRect" parent="HBoxContainer/PanelContainer2/MarginContainer/VBoxContainer/PlayerHeatProgressBar"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.1
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("6_7r46v")
+expand_mode = 1
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_01r66")
+
+[node name="Hotbar" type="Control" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.06
+mouse_filter = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/Hotbar"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.264
+anchor_right = 1.0
+anchor_bottom = 0.9
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.1
+mouse_filter = 2
+
+[node name="ColorRect" type="ColorRect" parent="HBoxContainer/Hotbar/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_stretch_ratio = 0.0
+mouse_filter = 2
+
+[node name="ColorRect2" type="ColorRect" parent="HBoxContainer/Hotbar/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_stretch_ratio = 0.0
+mouse_filter = 2
+
+[node name="ColorRect3" type="ColorRect" parent="HBoxContainer/Hotbar/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_stretch_ratio = 0.0
+mouse_filter = 2
+
+[node name="ColorRect4" type="ColorRect" parent="HBoxContainer/Hotbar/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_stretch_ratio = 0.0
+mouse_filter = 2
+
+[node name="ColorRect5" type="ColorRect" parent="HBoxContainer/Hotbar/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_stretch_ratio = 0.0
+mouse_filter = 2
+
+[node name="ColorRect6" type="ColorRect" parent="HBoxContainer/Hotbar/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_stretch_ratio = 0.0
+mouse_filter = 2
+
+[node name="ColorRect7" type="ColorRect" parent="HBoxContainer/Hotbar/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_stretch_ratio = 0.0
+mouse_filter = 2
+
+[node name="ColorRect8" type="ColorRect" parent="HBoxContainer/Hotbar/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_stretch_ratio = 0.0
+mouse_filter = 2
+
+[node name="VSeparator2" type="VSeparator" parent="HBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_01r66")
+
+[node name="Equipped" type="Control" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/Equipped"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -133.0
+offset_top = -64.0
+offset_bottom = 64.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 100
+
+[node name="EquippedTexture" type="TextureRect" parent="HBoxContainer/Equipped/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("2_20nbn")
+
+[node name="EquippedText" type="Label" parent="HBoxContainer/Equipped/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "12 / 14"

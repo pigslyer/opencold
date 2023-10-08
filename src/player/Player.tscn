@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://bv8hayx4en8oc"]
+[gd_scene load_steps=10 format=3 uid="uid://bv8hayx4en8oc"]
 
 [ext_resource type="Script" path="res://src/player/Player.gd" id="1_gnilo"]
 [ext_resource type="PackedScene" uid="uid://btdtc2o2jdoxs" path="res://src/models/humanoid/HumanoidModel.tscn" id="2_pw0av"]
 [ext_resource type="Script" path="res://src/player/InteractArea.gd" id="3_s6a15"]
 [ext_resource type="PackedScene" uid="uid://bg8chpmr5x6me" path="res://src/player/PlayerEquipment.tscn" id="3_ulwse"]
+[ext_resource type="PackedScene" uid="uid://gb5cqwb66yuu" path="res://src/player/HUD.tscn" id="5_nuo3h"]
 
 [sub_resource type="Curve" id="Curve_lcvly"]
 min_value = 250.0
@@ -55,5 +56,7 @@ shape = SubResource("RectangleShape2D_ervs3")
 
 [node name="PlayerEquipment" parent="CanvasLayer" instance=ExtResource("3_ulwse")]
 visible = false
+
+[node name="HUD" parent="CanvasLayer" instance=ExtResource("5_nuo3h")]
 
 [connection signal="on_item_equipped" from="CanvasLayer/PlayerEquipment" to="." method="_on_player_equipment_on_item_equipped"]

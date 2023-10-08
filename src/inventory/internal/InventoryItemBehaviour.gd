@@ -11,3 +11,4 @@ func update(_data: InventoryUsageData) -> void:
 
 func unequip(_data: InventoryUsageData) -> void:
 	pass
+

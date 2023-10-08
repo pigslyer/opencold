@@ -7,6 +7,9 @@
 export/*
 !export/.gitkeep
 
+src/tests/*
+!src/tests/.gitkeep
+
 .vscode/*
 docs/.obsidian/app.json
 docs/.obsidian/appearance.json

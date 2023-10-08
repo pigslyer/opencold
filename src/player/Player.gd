@@ -120,7 +120,7 @@ func take_damage(data: DamageData) -> void:
 
 ## Function that handles what happens when death occurs.
 func kill() -> void:
-	print("Man, I'm dead. (SkullEmoji)")
+	print("Man, I'm dead. 💀") # TODO: idk if emojis work :)
 
 ## Equips given item. Requests for the player to equip things should come from
 ## the player's inventory, not be directed to the player.
