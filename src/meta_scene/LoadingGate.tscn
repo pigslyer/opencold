@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3 uid="uid://cndsjlnt0bkh5"]
+
+[ext_resource type="Script" path="res://src/meta_scene/LoadingGate.gd" id="1_cfylx"]
+
+[node name="LoadingGate" type="Node2D" groups=["LOADING_GATE"]]
+script = ExtResource("1_cfylx")
+
+[node name="BeginLoad" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="ForceLoad" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CancelLoad" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[connection signal="body_entered" from="BeginLoad" to="." method="begin_load"]
+[connection signal="body_entered" from="ForceLoad" to="." method="force_load"]
+[connection signal="body_entered" from="CancelLoad" to="." method="cancel_load"]
