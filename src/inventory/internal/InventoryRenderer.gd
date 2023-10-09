@@ -52,7 +52,7 @@ func add_selection(id: String, area: Rect2i, fill_color: Color, outline_color: C
 	if !_selections.has(id):
 		_selections[id] = ItemSelection.new(self, _display_selection)
 		flag = true
-	return _selections[id].set_selection(area.position, area.size, fill_color, outline_color)
+	return _selections[id].set_selection(area.position, area.size, fill_color, outline_color) or flag
 
 func clear_selection(id: String, instant: bool = false) -> bool:
 	if _selections.has(id):
@@ -183,8 +183,6 @@ func _get_drag_data(at_position: Vector2) -> Variant:
 	var items: Dictionary = _inventory.get_all_items_by_position();
 	var item_at_pos: InventoryItemStack = items.get(tile_pos);
 	
-	inventory_event.emit(item_at_pos, tile_pos)
-	
 	if item_at_pos == null:
 		return null;
 	
@@ -303,6 +301,8 @@ func _gui_input(ev: InputEvent) -> void:
 				item_selected.emit(item_at_pos);
 			else:
 				item_selected.emit(null);
+	
+	inventory_event.emit(_inventory.get_all_items_by_position().get(tile_pos), tile_pos)
 
 
 func _process(_delta: float) -> void:
