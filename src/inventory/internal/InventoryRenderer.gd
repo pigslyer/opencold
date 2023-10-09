@@ -47,11 +47,8 @@ func add_selection(id: String, area: Rect2i, fill_color: Color, outline_color: C
 		flag = true
 	return _selections[id].set_selection(area.position, area.size, fill_color, outline_color) or flag
 
-func get_selection(id: String) -> ItemSelection:
-	if _selections.has(id):
-		return _selections[id]
-	else:
-		return null
+func is_selection_active(id: String) -> bool:
+	return _selections.has(id)
 
 func clear_selection(id: String, instant: bool = false) -> bool:
 	if _selections.has(id):
