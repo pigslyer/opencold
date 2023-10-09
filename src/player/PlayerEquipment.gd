@@ -3,6 +3,11 @@ extends Control
 ## Contains logic for handling and interfacing with every one of the player's
 ## equipment screens (inventory, cybernetics).
 
+## Constant ID for the selected item.
+const ID_SELECTION: String = "SELECTION"
+const SELECTION_COLOR: Color = Color(1.0, 1.0, 1.0, 0.0);
+const SELECTION_OUTLINE: Color = Color(1.0, 1.0, 1.0, 1.0);
+
 ## Emitted when the player has chosen to equip something.
 ## Item is either the item stack that the player wishes to equip, or null if the player
 ## wants to unequip themselves.
@@ -31,9 +36,18 @@ func _ready() -> void:
 func get_inventory() -> Inventory:
 	return _inventory;
 
+func _on_inventory_inventory_event(item_stack: InventoryItemStack, cursur_position: Vector2i, ev: InputEvent) -> void:
+	if ev is InputEventMouseButton && ev.pressed && ev.button_index == MOUSE_BUTTON_LEFT:
+		if item_stack == null:
+			_inventory_renderer.clear_selection(ID_SELECTION);
+			select(null);
+		else:
+			var hovered_rect: Rect2i = Rect2i(item_stack.position, item_stack.get_rotated_size());
+			_inventory_renderer.add_selection(ID_SELECTION, hovered_rect, SELECTION_COLOR, SELECTION_OUTLINE);
+			select(item_stack);
+
 ## Make this item stack appear selected in the inventory. Highlights it, displays its name
 ## and description.
-## TODO: Expose inventory renderer's selection API and make this function select the given item.
 func select(item: InventoryItemStack) -> void:
 	if item == null:
 		_description.clear();
