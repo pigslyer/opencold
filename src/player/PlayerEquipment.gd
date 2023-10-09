@@ -3,6 +3,9 @@ extends Control
 ## Contains logic for handling and interfacing with every one of the player's
 ## equipment screens (inventory, cybernetics).
 
+## Constant ID for the selected item.
+const ID_SELECTION: String = "SELECTION"
+
 ## Emitted when the player has chosen to equip something.
 ## Item is either the item stack that the player wishes to equip, or null if the player
 ## wants to unequip themselves.
@@ -31,9 +34,34 @@ func _ready() -> void:
 func get_inventory() -> Inventory:
 	return _inventory;
 
+
+func _on_inventory_inventory_event(item_stack, cursur_position, ev) -> void:
+	if ev is InputEventMouseButton && ev.pressed && ev.button_index == MOUSE_BUTTON_LEFT:
+		var hovered_rect: Rect2i;
+		
+		if item_stack == null:
+			hovered_rect = Rect2i(cursur_position, Vector2i.ONE);
+		else:
+			hovered_rect = Rect2i(item_stack.position, item_stack.get_rotated_size());
+		
+		var selection: InventoryRenderer.ItemSelection = _inventory_renderer.get_selection(ID_SELECTION)
+		if selection != null and selection.get_rect() == Rect2i(hovered_rect.position, hovered_rect.size):
+			_inventory_renderer.clear_selection(ID_SELECTION);
+		elif item_stack == null:
+			_inventory_renderer.clear_selection(ID_SELECTION);
+		else:
+			var color: Color = get_theme_color("selected_color", "InventoryRenderer");
+			var outline: Color = get_theme_color("selected_outline", "InventoryRenderer");
+			
+			_inventory_renderer.add_selection(ID_SELECTION, hovered_rect, color, outline);
+		
+		if selection != null and selection.get_rect() != InventoryRenderer.ItemSelection.NO_RECT:
+			select(item_stack);
+		else:
+			select(null);
+
 ## Make this item stack appear selected in the inventory. Highlights it, displays its name
 ## and description.
-## TODO: Expose inventory renderer's selection API and make this function select the given item.
 func select(item: InventoryItemStack) -> void:
 	if item == null:
 		_description.clear();

@@ -3,15 +3,8 @@ extends Control
 ## Renders a given inventory and handles basic input events - dragging and dropping items
 ## from and to itself and selecting items.
 
-## Constant ID for the selected item.
-const ID_SELECTION: String = "SELECTION"
-
 ## Emitted whenever a GUI event had occurred within the inventory and changed which grid cell was focused.
-signal inventory_event(item_stack: InventoryItemStack, cursur_position: Vector2i);
-
-## MOVE THIS OUT
-## Emitted when an item has been selected (single clicked on)
-signal item_selected(item: InventoryItemStack);
+signal inventory_event(item_stack: InventoryItemStack, cursur_position: Vector2i, ev: InputEvent);
 
 ## Emitted when the contents of the contained inventory have changed.
 signal inventory_content_changed();
@@ -54,12 +47,27 @@ func add_selection(id: String, area: Rect2i, fill_color: Color, outline_color: C
 		flag = true
 	return _selections[id].set_selection(area.position, area.size, fill_color, outline_color) or flag
 
+func get_selection(id: String) -> ItemSelection:
+	if _selections.has(id):
+		return _selections[id]
+	else:
+		return null
+
 func clear_selection(id: String, instant: bool = false) -> bool:
 	if _selections.has(id):
 		_selections[id].clear(instant)
 		_selections.erase(id)
 		return true
 	return false
+
+func clear_all_selections() -> bool:
+	if _selections.is_empty():
+		return false
+	else:
+		for selection in _selections:
+			_selections[selection].clear(true)
+		_selections.clear()
+		return true
 
 ## Sets the rendered inventory.
 func set_inventory(inventory: Inventory) -> void:
@@ -73,7 +81,7 @@ func set_inventory(inventory: Inventory) -> void:
 	_inventory.inventory_changed.connect(_on_inventory_changed);
 	
 	_hover.clear();
-	clear_selection(ID_SELECTION);
+	clear_all_selections();
 	queue_redraw();
 
 func _on_inventory_changed():
@@ -194,7 +202,7 @@ func _get_drag_data(at_position: Vector2) -> Variant:
 	_rendering_any_drags = true;
 	set_drag_preview(preview);
 	queue_redraw();
-	clear_selection(ID_SELECTION);
+	clear_all_selections();
 	return drag_data;
 
 func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
@@ -285,30 +293,13 @@ func _gui_input(ev: InputEvent) -> void:
 			hovered_rect = Rect2i(item_at_pos.position, item_at_pos.get_rotated_size());
 		
 		_hover.set_selection(hovered_rect.position, hovered_rect.size, hover_color, hover_outline);
-		
-		# we're trying to select something
-		if ev is InputEventMouseButton && ev.pressed && ev.button_index == MOUSE_BUTTON_LEFT:
-			if _selections.has(ID_SELECTION) and _selections[ID_SELECTION].get_rect() == Rect2i(hovered_rect.position, hovered_rect.size):
-				clear_selection(ID_SELECTION);
-			elif item_at_pos == null:
-				clear_selection(ID_SELECTION);
-			else:
-				var color: Color = get_theme_color("selected_color", "InventoryRenderer");
-				var outline: Color = get_theme_color("selected_outline" , "InventoryRenderer");
-				
-				add_selection(ID_SELECTION, hovered_rect, color, outline);
-			
-			if _selections.has(ID_SELECTION) and _selections[ID_SELECTION].get_rect() != ItemSelection.NO_RECT:
-				item_selected.emit(item_at_pos);
-			else:
-				item_selected.emit(null);
 	
-	inventory_event.emit(_inventory.get_all_items_by_position().get(tile_pos), tile_pos)
+	inventory_event.emit(_inventory.get_all_items_by_position().get(tile_pos), tile_pos, ev)
 
 
 func _process(_delta: float) -> void:
 	if _rendering_any_drags and get_viewport().gui_get_drag_data() == null:
-		clear_selection(ID_SELECTION, true);
+		clear_all_selections();
 		queue_redraw();
 		_rendering_any_drags = false;
 
