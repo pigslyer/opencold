@@ -57,6 +57,7 @@ func add_selection(id: String, area: Rect2i, fill_color: Color, outline_color: C
 func clear_selection(id: String, instant: bool = false) -> bool:
 	if _selections.has(id):
 		_selections[id].clear(instant)
+		_selections.erase(id)
 		return true
 	return false
 
