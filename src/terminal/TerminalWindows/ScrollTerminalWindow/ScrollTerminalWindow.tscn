@@ -1,19 +1,30 @@
-[gd_scene format=3 uid="uid://c6sb4sf3jaupg"]
+[gd_scene load_steps=2 format=3 uid="uid://c6sb4sf3jaupg"]
+
+[ext_resource type="Script" path="res://src/terminal/TerminalWindows/ScrollTerminalWindow/ScrollTerminalWindowScene.gd" id="1_y4nml"]
 
 [node name="ScrollTerminalWindow" type="VBoxContainer"]
 custom_minimum_size = Vector2(0, 26)
-offset_left = -450.0
-offset_top = -15.5
-offset_right = 450.0
-offset_bottom = 15.5
+offset_right = 45.0
+offset_bottom = 78.0
+script = ExtResource("1_y4nml")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 2
 size_flags_vertical = 3
 
 [node name="Label" type="Label" parent="ScrollContainer"]
-custom_minimum_size = Vector2(900, 26)
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 3
 text = "PLACEHOLDER"
 autowrap_mode = 3
+
+[node name="BackButton" type="Button" parent="."]
+layout_mode = 2
+text = "Back"
+
+[node name="ExitButton" type="Button" parent="."]
+layout_mode = 2
+text = "Exit"
+
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="ExitButton" to="." method="_on_exit_button_pressed"]

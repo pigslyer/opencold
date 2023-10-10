@@ -1,4 +1,0 @@
-[gd_scene format=3 uid="uid://d8ygge1420wx"]
-
-[node name="MenuButtonTerminalWindow" type="Button"]
-focus_mode = 0

@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://26ni8u12uhow"
-path="res://.godot/imported/consola.ttf-6fe9e190e1a37c083194d60f48fc2b6c.fontdata"
+path="res://.godot/imported/consola.ttf-d5a79cdcf0f6c4d24ecf9b7f5208d695.fontdata"
 
 [deps]
 
-source_file="res://src/terminal/consola.ttf"
-dest_files=["res://.godot/imported/consola.ttf-6fe9e190e1a37c083194d60f48fc2b6c.fontdata"]
+source_file="res://src/assets/consola.ttf"
+dest_files=["res://.godot/imported/consola.ttf-d5a79cdcf0f6c4d24ecf9b7f5208d695.fontdata"]
 
 [params]
 

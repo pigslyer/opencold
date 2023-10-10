@@ -2,7 +2,7 @@ class_name BaseTerminalWindow
 extends  Resource;
 
 @export var button_text : String;
-var signals : Array;
 
-func get_menu() -> Node:
-	return null;
+func get_menu() -> Control:
+	push_error("BaseTerminalWindow doesn't return anything on its own.")
+	return Control.new();

@@ -1,6 +1,42 @@
-[gd_scene load_steps=2 format=3 uid="uid://cnwwvmbrbisjt"]
+[gd_scene load_steps=8 format=3 uid="uid://cnwwvmbrbisjt"]
 
 [ext_resource type="PackedScene" uid="uid://dvhwwdfik4ixu" path="res://src/terminal/Terminal.tscn" id="1_506tv"]
+[ext_resource type="Script" path="res://src/terminal/TerminalWindows/MenuTerminalWindow/MenuTerminalWindow.gd" id="2_icq6b"]
+[ext_resource type="Script" path="res://src/terminal/TerminalWindows/ScrollTerminalWindow/ScrollTerminalWindow.gd" id="3_yv7ik"]
+
+[sub_resource type="GDScript" id="GDScript_wtthn"]
+script/source = "extends Control
+
+func _ready():
+	$Terminal.open();
+
+"
+
+[sub_resource type="Resource" id="Resource_82057"]
+script = ExtResource("2_icq6b")
+text = "h :)"
+menus = Array[Resource("res://src/terminal/TerminalWindows/BaseTerminalWindow.gd")]([])
+has_back = true
+has_exit = false
+button_text = "there's h"
+
+[sub_resource type="Resource" id="Resource_nkt1e"]
+script = ExtResource("3_yv7ik")
+text = "dots
+.
+.
+."
+has_back = false
+has_exit = true
+button_text = "dots"
+
+[sub_resource type="Resource" id="Resource_mrhln"]
+script = ExtResource("2_icq6b")
+text = "I am important text"
+menus = Array[Resource("res://src/terminal/TerminalWindows/BaseTerminalWindow.gd")]([SubResource("Resource_82057"), SubResource("Resource_nkt1e")])
+has_back = false
+has_exit = true
+button_text = ""
 
 [node name="TerminalTest" type="Control"]
 layout_mode = 3
@@ -9,6 +45,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = SubResource("GDScript_wtthn")
 
 [node name="Terminal" parent="." instance=ExtResource("1_506tv")]
 layout_mode = 1
+start_window = SubResource("Resource_mrhln")
