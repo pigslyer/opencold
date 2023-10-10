@@ -2,6 +2,8 @@ class_name MenuTerminalWindow
 extends BaseTerminalWindow;
 
 @export_multiline var text : String;
+
+## List of terminal windows that will be shown as buttons
 @export var menus : Array[BaseTerminalWindow];
 @export var has_back : bool = false;
 @export var has_exit : bool = true;
