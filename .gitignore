@@ -1,6 +1,9 @@
 # Godot 4+ specific ignores
 .godot/
 
+# ignore godot's temp files
+*.tmp
+
 export/*
 !export/.gitkeep
 

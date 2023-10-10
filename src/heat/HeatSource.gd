@@ -5,7 +5,7 @@ extends AmbientHeat
 
 ## How close the target has to be in order to receive heat from this source.
 ## If, for example, this heat source's collision is a circle, this value should be equal to it's radius.
-@export var radius: float = 100.0
+@export_range(0.0, 2000.0, 0.5, "or_greater", "suffix:px") var radius: float = 100.0
 
 ## Gets the [HeatData] relative to the position. [br]
 ## Unlike [AmbientHeat], this scales the heat based on the target's distance to the source.

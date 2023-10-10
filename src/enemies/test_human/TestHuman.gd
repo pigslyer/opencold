@@ -38,14 +38,14 @@ var alert_level: float = 0.0: set = _set_alert_level
 func _set_alert_level(new_alert_level: float) -> void:
 	alert_level = clamp(new_alert_level, 0.0, 1.0)
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if target != null:
 		if alert_level > 0.0:
 			var point : Vector2 = target.position - position
 			var rad: float = atan2(point.y, point.x)
 			rotation = lerp_angle(rotation, rad, alert_level * 0.25)
 		else:
-			target = null
+			aggro(null)
 	else:
 		alert_level = 0.0
 
@@ -57,7 +57,7 @@ func _physics_process(delta: float) -> void:
 				ray.rotation = -rotation
 				ray.target_position = (body.position - position).normalized() * sight_range
 				if ray.get_collider() == body:
-					target = body
+					aggro(body)
 					navigation_agent.target_position = target.position
 					alert_level += delta
 					return
@@ -91,12 +91,23 @@ func take_damage(data: DamageData) -> void:
 		return
 	
 	if data.does_source_aggro():
-		target = data.source
+		aggro(data.source)
 		if alert_level < 0.5:
 			alert_level = 0.5
 
+## Function that handles aggroing and de-aggroing. Adds itself to the aggro_array if its targeting a Player.
+## Removes itself from the aggro_array otherwise.
+func aggro(tar: CharacterBody2D) -> void:
+	if tar != target:
+		target = tar
+		if target is Player:
+			EnemyUtil.begin_aggro(self)
+		else:
+			EnemyUtil.end_aggro(self)
+
 ## Function that handles what happens when death occurs.
 func kill() -> void:
+	EnemyUtil.end_aggro(self)
 	queue_free()
 
 ## TODO: Implement actual weapons, this is just magic bullets currently.
