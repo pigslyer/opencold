@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://n233vxc16luc"]
+[gd_scene load_steps=17 format=3 uid="uid://chccliodhyfh3"]
 
 [ext_resource type="PackedScene" uid="uid://bv8hayx4en8oc" path="res://src/player/Player.tscn" id="1_0rqhy"]
 [ext_resource type="Texture2D" uid="uid://cefay3p87ij2q" path="res://src/assets/icon.svg" id="2_736r7"]
@@ -37,6 +37,16 @@ radius = 350.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nfmy1"]
 size = Vector2(2500, 1881)
+
+[sub_resource type="GDScript" id="GDScript_iensj"]
+script/source = "extends StaticBody2D
+
+func interact(char: CharacterBody2D):
+	print(\"CURRENTLY AGGOROD BY \", EnemyUtil.aggro_set.size(), \" ENEMIES!\")
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_l52cj"]
+size = Vector2(120, 120)
 
 [node name="TestScene" type="Node2D"]
 
@@ -126,3 +136,15 @@ target_heat = 16.0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AmbientHeat"]
 position = Vector2(637, 30.5)
 shape = SubResource("RectangleShape2D_nfmy1")
+
+[node name="TestInteract" type="StaticBody2D" parent="."]
+modulate = Color(0.254902, 1, 0.188235, 1)
+position = Vector2(-200, -500)
+collision_layer = 9
+script = SubResource("GDScript_iensj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestInteract"]
+shape = SubResource("RectangleShape2D_l52cj")
+
+[node name="Sprite2D" type="Sprite2D" parent="TestInteract"]
+texture = ExtResource("2_736r7")
