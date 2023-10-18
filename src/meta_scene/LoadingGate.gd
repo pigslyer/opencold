@@ -1,23 +1,37 @@
 class_name LoadingGate;
 extends Node2D
+## A unique point in one scene which links to another unique point in a different scene.
+## This node provides a low level link between the two scenes.
+##
+## Note: All methods on this node contain 3 discard parameters. This is to 
+## make them easy to use with signals which may pass additional data.
 
+## The group all loading gates belong to. This is to make them easily identifiable in new scenes.
 const LOADING_GATE_GROUP: StringName = &"LOADING_GATE";
 
+## Signal emitted when linked scene has finished loading and is present in the scene. 
+## To be used with visuals/animations e.g. opening doors. 
+## If instant is true, the animation should resolve instantly and without/with alternative
+## sound effects.
 signal on_linked_loaded(instant: bool);
+
+## Signal emitted when linked scene has finished unloading and is no longer present in the scene/has had its _meta_unload method called. 
+## To be used with visuals/animations e.g. closing doors. 
+## If instant is true, the animation should resolve instantly and without/with alternative
+## sound effects.
 signal on_linked_unloaded(instant: bool);
 
+## The absolute path to the linked level.
 @export_file var _next_level: String;
+
+## The unique id of this gate and the gate it links to.
 @export var _gate_id: String;
 
+## The loaded LoadingGate pair with the same id.
 var _linked_gate: LoadingGate = null;
 
-func _ready() -> void:
-	if Engine.is_editor_hint():
-		var update: Callable = func(_discard = null):
-			update_configuration_warnings();
-		
-		get_tree().node_added.connect(update);
-		get_tree().node_removed.connect(update);
+func _init() -> void:
+	add_to_group(LOADING_GATE_GROUP);
 
 ## Begins loading linked scene.
 func begin_load(_discard1 = null, _discard2 = null, _discard3 = null) -> void:
@@ -52,7 +66,7 @@ func begin_load(_discard1 = null, _discard2 = null, _discard3 = null) -> void:
 				correct_gate._linked_gate = self;
 				
 				on_linked_loaded.emit(false);
-				correct_gate.on_linked_unloaded.emit(true);
+				correct_gate.on_linked_loaded.emit(true);
 	);
 
 
@@ -83,4 +97,3 @@ func cancel_load(_discard1 = null, _discard2 = null, _discard3 = null) -> void:
 		_linked_gate = null;
 	
 	# unimplemented thread cancel load
-

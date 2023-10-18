@@ -1,8 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://chv487vafuaib"]
+[gd_scene load_steps=2 format=3 uid="uid://chv487vafuaib"]
 
 [ext_resource type="Script" path="res://src/meta_scene/MetaScene.gd" id="1_chtfb"]
-[ext_resource type="PackedScene" uid="uid://8wb2lpve433p" path="res://src/meta_scene/Test1.tscn" id="2_h10t6"]
 
 [node name="MetaScene" type="Node2D" groups=["META_SCENE"]]
 script = ExtResource("1_chtfb")
-_starting_scene = ExtResource("2_h10t6")

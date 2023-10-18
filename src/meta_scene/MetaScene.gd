@@ -1,13 +1,20 @@
 class_name MetaScene
 extends Node2D
+## The root of scenes with interscene transitions.
 
+## All nodes in a group with this prefix get loaded separately. If an added scene shares a node with
+## the same group name as an existing interscene unique node, that node in the added scene will be
+## freed automatically.
 const INTERSCENE_UNIQUE_NODES_GROUP_PREFIX: StringName = &"INTERSCENE_UNIQUE_NODE";
 
-const SAVE_LOAD_SCENE_ROOT_PREFIX: StringName = &"";
-const SAVE_LOAD_GROUP_NAME: StringName = &"SAVES";
+## Metadata on every node in added scene, pointing to the root of that scene.
+## Could be removed in favour of tree traversal if iteration count becomes an issue.
+const SCENE_ROOT_META_NAME: StringName = &"meta_scene_root";
 
-const SCENE_ROOT_META_NAME = "meta_scene_root";
+## Metadata on every added scene, which maps to that scene's resource's path.
+const SCENE_RESOURCE_PATH_META: StringName = &"meta_scene_resource_path";
 
+## The scene to be added on startup.
 @export var _starting_scene: PackedScene = null;
 
 func _ready():
@@ -18,20 +25,33 @@ func _ready():
 		interscene.transform = instance.transform * interscene.transform;
 		
 		add_child(interscene);
-		
 	
 	add_child(instance);
 	_starting_scene = null;
 
 # for now all of these block, performance improvements can be done as the need arises
 
+## Adds scene at given path to this meta scene, calling [param on_load] with a SubsceneMeta parameter
+## before adding it to the scene tree. This opportunity should be used to (at least) correct 
+## its root's transform
 func add_scene(scene_resource_path: String, on_load: Callable = func(_discard): pass) -> void:
+	# check if the scene already exists and reuse it if it does
+	for child in get_children():
+		var path: String = child.get_meta(SCENE_RESOURCE_PATH_META);
+		if path == scene_resource_path:
+			if child.has_method("_meta_cancel_unload"):
+				child._meta_cancel_unload();
+			
+			on_load.call(SubsceneMeta.get_from_tree(child));
+			return;
+	
 	var time: int = Time.get_ticks_msec();
 	var packed_scene: PackedScene = load(scene_resource_path);
 	print("Loading packed scene %s took %s ms." % [scene_resource_path, Time.get_ticks_msec() - time]);
 	
 	time = Time.get_ticks_msec();
 	var node: Node = packed_scene.instantiate();
+	node.set_meta(SCENE_RESOURCE_PATH_META, scene_resource_path);
 	print("Instantiating packed scene %s took %s ms." % [scene_resource_path, Time.get_ticks_msec() - time]);
 	
 	time = Time.get_ticks_msec();
@@ -47,42 +67,38 @@ func add_scene(scene_resource_path: String, on_load: Callable = func(_discard): 
 	time = Time.get_ticks_msec();
 	add_child(node);
 	
-	for interscene in subscene_meta.interscene:
-		if interscene is Node2D:
-			# take into account repositioning
-			interscene.transform = node.transform * interscene.transform;
-		
-		add_child(interscene);
+	if node is Node2D:
+		for interscene in subscene_meta.interscene:
+			if interscene is Node2D:
+				# take into account repositioning
+				interscene.transform = node.transform * interscene.transform;
+			
+			add_child(interscene);
 	
 	print("Adding scene %s to tree took %s ms." % [scene_resource_path, Time.get_ticks_msec() - time]);
-	
 
-func switch_to_scene(scene_resource_path: String) -> void:
-	for scene in get_children():
-		scene.queue_free();
-	
-	add_scene(scene_resource_path);
-
-
+## Removes parent meta subscene this child is a descendant of.
 func remove_scene(child_of_scene: Node) -> void:
 	var root = get_meta_root(child_of_scene);
 	
 	if root is Node:
-		if root.has_method("request_free"):
-			root.request_free();
+		if root.has_method("_meta_unload"):
+			root._meta_unload();
 		else:
 			root.queue_free();
 
-
+## Returns meta subscene root this child is a descendant of.
 func get_meta_root(child_of_scene: Node) -> Node:
 	return child_of_scene.get_meta(SCENE_ROOT_META_NAME, null);
 
+## Initializes given meta subscene, generating a SubsceneMeta in the process.
 func _initialize_scene(root: Node) -> SubsceneMeta:
 	var subscene_meta := SubsceneMeta.new(root);
 	_initialize_node(root, subscene_meta);
 	
 	return subscene_meta
 
+## Initializes node as part of meta subscene.
 func _initialize_node(node: Node, subscene_meta: SubsceneMeta, skip_interscene_root: bool = true) -> void:
 	if not skip_interscene_root:
 		for group in node.get_groups():
