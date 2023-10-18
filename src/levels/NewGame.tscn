@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://dy10a85n6fv13"]
+
+[ext_resource type="PackedScene" uid="uid://chv487vafuaib" path="res://src/meta_scene/MetaScene.tscn" id="1_0l5t0"]
+
+[node name="MetaScene" instance=ExtResource("1_0l5t0")]

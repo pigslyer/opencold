@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://chv487vafuaib"]
+
+[ext_resource type="Script" path="res://src/meta_scene/MetaScene.gd" id="1_chtfb"]
+
+[node name="MetaScene" type="Node2D" groups=["META_SCENE"]]
+script = ExtResource("1_chtfb")

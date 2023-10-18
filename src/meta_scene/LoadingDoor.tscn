@@ -1,0 +1,78 @@
+[gd_scene load_steps=8 format=3 uid="uid://cfkhovd24k4c7"]
+
+[ext_resource type="Script" path="res://src/meta_scene/LoadingDoor.gd" id="1_3d3e8"]
+[ext_resource type="Texture2D" uid="uid://cefay3p87ij2q" path="res://src/assets/icon.svg" id="1_8dksy"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wfgsd"]
+size = Vector2(128, 384)
+
+[sub_resource type="Animation" id="Animation_i7kaj"]
+resource_name = "Close"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatableBody2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, -384), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_fvew7"]
+resource_name = "Open"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatableBody2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -384)]
+}
+
+[sub_resource type="Animation" id="Animation_kjbqy"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatableBody2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_0g2jy"]
+_data = {
+"Close": SubResource("Animation_i7kaj"),
+"Open": SubResource("Animation_fvew7"),
+"RESET": SubResource("Animation_kjbqy")
+}
+
+[node name="LoadingDoor" type="Node2D"]
+script = ExtResource("1_3d3e8")
+
+[node name="AnimatableBody2D" type="StaticBody2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="AnimatableBody2D"]
+rotation = -1.5708
+scale = Vector2(3, 1)
+texture = ExtResource("1_8dksy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatableBody2D"]
+shape = SubResource("RectangleShape2D_wfgsd")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+playback_process_mode = 0
+libraries = {
+"": SubResource("AnimationLibrary_0g2jy")
+}
