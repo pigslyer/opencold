@@ -3,9 +3,8 @@ extends Control
 ## Renders a given inventory and handles basic input events - dragging and dropping items
 ## from and to itself and selecting items.
 
-## MOVE THIS OUT
-## Emitted when an item has been selected (single clicked on)
-signal item_selected(item: InventoryItemStack);
+## Emitted whenever a GUI event had occurred within the inventory and changed which grid cell was focused.
+signal inventory_event(item_stack: InventoryItemStack, cursur_position: Vector2i, ev: InputEvent);
 
 ## Emitted when the contents of the contained inventory have changed.
 signal inventory_content_changed();
@@ -35,10 +34,37 @@ var _inventory: Inventory;
 var _rendering_any_drags: bool;
 
 @onready var _hover := ItemSelection.new(self, _display_hover);
-@onready var _selection := ItemSelection.new(self, _display_selection);
+
+var _selections : Dictionary
 
 func _ready() -> void:
 	mouse_exited.connect(_on_mouse_exited);
+
+func add_selection(id: String, area: Rect2i, fill_color: Color, outline_color: Color) -> bool:
+	var flag: bool = false
+	if !_selections.has(id):
+		_selections[id] = ItemSelection.new(self, _display_selection)
+		flag = true
+	return _selections[id].set_selection(area.position, area.size, fill_color, outline_color) or flag
+
+func is_selection_active(id: String) -> bool:
+	return _selections.has(id)
+
+func clear_selection(id: String, instant: bool = false) -> bool:
+	if _selections.has(id):
+		_selections[id].clear(instant)
+		_selections.erase(id)
+		return true
+	return false
+
+func clear_all_selections() -> bool:
+	if _selections.is_empty():
+		return false
+	else:
+		for selection in _selections:
+			_selections[selection].clear(true)
+		_selections.clear()
+		return true
 
 ## Sets the rendered inventory.
 func set_inventory(inventory: Inventory) -> void:
@@ -52,7 +78,7 @@ func set_inventory(inventory: Inventory) -> void:
 	_inventory.inventory_changed.connect(_on_inventory_changed);
 	
 	_hover.clear();
-	_selection.clear();
+	clear_all_selections();
 	queue_redraw();
 
 func _on_inventory_changed():
@@ -173,7 +199,7 @@ func _get_drag_data(at_position: Vector2) -> Variant:
 	_rendering_any_drags = true;
 	set_drag_preview(preview);
 	queue_redraw();
-	_selection.clear();
+	clear_all_selections();
 	return drag_data;
 
 func _can_drop_data(at_position: Vector2, data: Variant) -> bool:
@@ -264,28 +290,13 @@ func _gui_input(ev: InputEvent) -> void:
 			hovered_rect = Rect2i(item_at_pos.position, item_at_pos.get_rotated_size());
 		
 		_hover.set_selection(hovered_rect.position, hovered_rect.size, hover_color, hover_outline);
-		
-		# we're trying to select something
-		if ev is InputEventMouseButton && ev.pressed && ev.button_index == MOUSE_BUTTON_LEFT:
-			if _selection.get_rect() == Rect2i(hovered_rect.position, hovered_rect.size):
-				_selection.clear();
-			elif item_at_pos == null:
-				_selection.clear();
-			else:
-				var color: Color = get_theme_color("selected_color", "InventoryRenderer");
-				var outline: Color = get_theme_color("selected_outline" , "InventoryRenderer");
-				
-				_selection.set_selection(hovered_rect.position, hovered_rect.size, color, outline);
-			
-			if _selection.get_rect() != ItemSelection.NO_RECT:
-				item_selected.emit(item_at_pos);
-			else:
-				item_selected.emit(null);
+	
+	inventory_event.emit(_inventory.get_all_items_by_position().get(tile_pos), tile_pos, ev)
 
 
 func _process(_delta: float) -> void:
 	if _rendering_any_drags and get_viewport().gui_get_drag_data() == null:
-		_selection.clear(true);
+		clear_all_selections();
 		queue_redraw();
 		_rendering_any_drags = false;
 
@@ -303,10 +314,11 @@ class ItemSelection extends RefCounted:
 		_inventory_renderer = inventory_renderer;
 		_display = display;
 	
-	func set_selection(hover_position: Vector2i, hover_size: Vector2i, hover_color: Color, outline_color: Color) -> void:
+	func set_selection(hover_position: Vector2i, hover_size: Vector2i, hover_color: Color, outline_color: Color) -> bool:
+		var flag: bool = _current_rect.position != hover_position or _current_rect.size != hover_size;
 		if not _display:
 			_current_rect = Rect2i(hover_position, hover_size);
-			return;
+			return true;
 		
 		var render_data: RenderData = _inventory_renderer._get_render_data();
 		
@@ -319,8 +331,8 @@ class ItemSelection extends RefCounted:
 		else:
 			_selection_renderer.set_rect(hover_local_pos, hover_local_size);
 		
-		_selection_renderer.set_hover(hover_color, outline_color);
 		_current_rect = Rect2i(hover_position, hover_size);
+		return _selection_renderer.set_hover(hover_color, outline_color) or flag;
 	
 	func clear(instant: bool = false) -> void:
 		if not _display:
@@ -382,9 +394,9 @@ class ItemSelection extends RefCounted:
 			_target_rect = Rect2(local_pos, local_size);
 			return true;
 		
-		func set_hover(hover_color: Color, outline_color: Color) -> void:
+		func set_hover(hover_color: Color, outline_color: Color) -> bool:
 			if _target_color.is_equal_approx(hover_color) and _target_outline.is_equal_approx(outline_color):
-				return;
+				return false;
 			
 			var tween := create_tween().set_parallel();
 			
@@ -392,6 +404,7 @@ class ItemSelection extends RefCounted:
 			tween.tween_property(_ref_rect, "border_color", outline_color, INTERP_SPEED);
 			_target_color = hover_color;
 			_target_outline = outline_color;
+			return true;
 		
 		func hide_hover() -> void:
 			var tween := create_tween();

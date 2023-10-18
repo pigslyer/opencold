@@ -83,5 +83,5 @@ disabled = true
 text = "Equip
 "
 
-[connection signal="item_selected" from="Inventory/VBox/HBox/Inventory" to="." method="select"]
+[connection signal="inventory_event" from="Inventory/VBox/HBox/Inventory" to="." method="_on_inventory_inventory_event"]
 [connection signal="pressed" from="Inventory/VBox/Buttons/Equip" to="." method="_on_equip_pressed"]
